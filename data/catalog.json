@@ -51,7 +51,9 @@
       "description": "",
       "cover": "",
       "updatedAt": "2026-07-29T09:55:49",
-      "subtitle": ""
+      "subtitle": "",
+      "language": "en",
+      "publishedAt": "2026-07-29"
     },
     {
       "id": "tam-ly-hoc-cho-su-thay-oi-triet-e",
@@ -87,7 +89,9 @@
       "narrator": "Thảo Nguyên",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T12:21:16"
+      "updatedAt": "2026-07-29T12:21:16",
+      "language": "vi",
+      "publishedAt": "2026-07-29"
     }
   ]
 }

@@ -268,6 +268,30 @@ h2 {
   font-weight: 700;
 }
 
+.book-meta-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.book-meta-list span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 9px;
+  border: 1px solid rgba(111, 131, 116, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.58);
+  color: var(--sage-dark);
+  font-size: 0.78rem;
+  font-weight: 760;
+}
+
+.detail-meta {
+  margin: 12px 0 0;
+}
+
 .card-actions {
   display: flex;
   flex-wrap: wrap;
@@ -665,8 +689,15 @@ body.mini-player .round-button {
     -webkit-line-clamp: 2;
   }
 
-  .card-meta {
-    font-size: 0.8rem;
+  .book-meta-list {
+    gap: 5px;
+    margin-top: 8px;
+  }
+
+  .book-meta-list span {
+    min-height: 23px;
+    padding: 0 7px;
+    font-size: 0.72rem;
   }
 
   .card-actions {

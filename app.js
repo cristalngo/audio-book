@@ -98,6 +98,8 @@ function normalizeCatalog(books, assetBase) {
     author: book.author || book.narrator || "",
     cover: resolveAsset(book.cover, assetBase) || knownCover(book.id) || placeholderCover(book),
     description: book.description || book.subtitle || "",
+    language: normalizeLanguage(book.language, book.title),
+    publishedAt: book.publishedAt || book.publishedDate || book.updatedAt || "",
     chapters: [...(book.chapters || [])]
       .sort((a, b) => (a.order || 0) - (b.order || 0))
       .map((chapter) => ({
@@ -110,6 +112,59 @@ function normalizeCatalog(books, assetBase) {
 
 function knownCover(bookId) {
   return knownCoverPaths[bookId] || "";
+}
+
+function normalizeLanguage(language, title = "") {
+  if (language) {
+    const value = String(language).toLowerCase();
+    if (value.startsWith("vi") || value.includes("vietnam")) return "vi";
+    if (value.startsWith("en") || value.includes("english")) return "en";
+  }
+  return /[ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/i.test(title) ? "vi" : "en";
+}
+
+function copy(book, key) {
+  const strings = {
+    en: {
+      back: "Back to library",
+      hide: "Hide",
+      listen: "Listen",
+      open: "Open",
+      published: "Published",
+      language: "English"
+    },
+    vi: {
+      back: "Quay lại thư viện",
+      hide: "Ẩn",
+      listen: "Nghe",
+      open: "Mở",
+      published: "Xuất bản",
+      language: "Tiếng Việt"
+    }
+  };
+  return strings[book.language || "en"]?.[key] || strings.en[key];
+}
+
+function chapterCountLabel(book) {
+  const count = book.chapters.length;
+  if (book.language === "vi") return `${count} chương`;
+  return `${count} chapter${count === 1 ? "" : "s"}`;
+}
+
+function languageLabel(book) {
+  return copy(book, "language");
+}
+
+function publishedLabel(book) {
+  const date = new Date(book.publishedAt);
+  const value = Number.isNaN(date.getTime())
+    ? book.publishedAt
+    : date.toLocaleDateString(book.language === "vi" ? "vi-VN" : "en-US", {
+      year: "numeric",
+      month: book.language === "vi" ? "2-digit" : "short",
+      day: "numeric"
+    });
+  return `${copy(book, "published")} ${value}`;
 }
 
 function resolveAsset(path, assetBase) {
@@ -129,18 +184,22 @@ function renderLibrary() {
   els.hiddenToggleBtn.textContent = state.showHiddenBooks ? "Hide hidden" : `Hidden (${hiddenBooks.length})`;
   els.bookGrid.innerHTML = visibleBooks.length ? visibleBooks.map((book) => `
     <article class="book-card" data-book-id="${escapeHtml(book.id)}">
-      <button class="book-open" type="button" data-action="open-book" aria-label="Open ${escapeHtml(book.title)}">
+      <button class="book-open" type="button" data-action="open-book" aria-label="${escapeHtml(copy(book, "open"))} ${escapeHtml(book.title)}">
         <img src="${escapeHtml(book.cover)}" alt="">
       </button>
       <div>
         <h3>${escapeHtml(book.title)}</h3>
         ${book.subtitle || book.description ? `<p>${escapeHtml(book.subtitle || book.description)}</p>` : ""}
-        <span class="card-meta">${book.chapters.length} chapter${book.chapters.length === 1 ? "" : "s"}</span>
+        <div class="book-meta-list">
+          <span>${escapeHtml(chapterCountLabel(book))}</span>
+          <span>${escapeHtml(languageLabel(book))}</span>
+          ${book.publishedAt ? `<span>${escapeHtml(publishedLabel(book))}</span>` : ""}
+        </div>
         <div class="card-actions">
-          <button class="primary-button small-button" type="button" data-action="open-book">Listen</button>
+          <button class="primary-button small-button" type="button" data-action="open-book">${escapeHtml(copy(book, "listen"))}</button>
         </div>
       </div>
-      <button class="hide-book-button" type="button" data-action="hide-book" aria-label="Hide ${escapeHtml(book.title)}">
+      <button class="hide-book-button" type="button" data-action="hide-book" aria-label="${escapeHtml(copy(book, "hide"))} ${escapeHtml(book.title)}">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M3 3l18 18"/>
           <path d="M10.6 10.6A2 2 0 0 0 12 14a2 2 0 0 0 1.4-.6"/>
@@ -182,6 +241,7 @@ function renderLibrary() {
 
 function renderBook(book) {
   const shouldShowDescription = book.description && book.description !== book.subtitle;
+  els.backBtn.textContent = copy(book, "back");
 
   els.bookDetail.innerHTML = `
     <div class="book-heading">
@@ -190,6 +250,11 @@ function renderBook(book) {
         ${book.author ? `<p class="eyebrow">${escapeHtml(book.author)}</p>` : ""}
         <h1>${escapeHtml(book.title)}</h1>
         ${book.subtitle ? `<h2>${escapeHtml(book.subtitle)}</h2>` : ""}
+        <div class="book-meta-list detail-meta">
+          <span>${escapeHtml(chapterCountLabel(book))}</span>
+          <span>${escapeHtml(languageLabel(book))}</span>
+          ${book.publishedAt ? `<span>${escapeHtml(publishedLabel(book))}</span>` : ""}
+        </div>
         ${shouldShowDescription ? `<p class="book-description">${escapeHtml(book.description)}</p>` : ""}
       </div>
     </div>
