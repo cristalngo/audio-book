@@ -27,6 +27,22 @@
           "duration": 913.4445,
           "words": 1957,
           "order": 3
+        },
+        {
+          "id": "ch-004-ms5lqlz6",
+          "title": "Chapter 3: Destructive Atoms",
+          "src": "audio/dayspring-of-youth/004-chapter-3-destructive-atoms.mp3",
+          "duration": 1605.422,
+          "words": 3402,
+          "order": 4
+        },
+        {
+          "id": "ch-005-ms5m6fer",
+          "title": "Chapter 4: The Astral",
+          "src": "audio/dayspring-of-youth/005-chapter-4-the-astral.mp3",
+          "duration": 1392.608208,
+          "words": 2969,
+          "order": 5
         }
       ],
       "title": "Dayspring of Youth",
@@ -34,7 +50,7 @@
       "narrator": "Brian M",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-28T23:39:37",
+      "updatedAt": "2026-07-29T00:31:21",
       "subtitle": ""
     }
   ]
