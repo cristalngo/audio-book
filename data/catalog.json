@@ -8,7 +8,7 @@
           "id": "ch-001",
           "title": "Introduction",
           "src": "audio/dayspring-of-youth/001-introduction.mp3",
-          "duration": 315.854167,
+          "duration": 316.290125,
           "words": 620,
           "order": 1
         },
@@ -16,7 +16,7 @@
           "id": "ch-002-ms5iaeoy",
           "title": "Chapter 1: Atoms",
           "src": "audio/dayspring-of-youth/002-chapter-1-atoms.mp3",
-          "duration": 1475.235583,
+          "duration": 1450.854542,
           "words": 3191,
           "order": 2
         }
@@ -26,7 +26,7 @@
       "narrator": "Brian M",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-28T22:58:55",
+      "updatedAt": "2026-07-28T23:33:42",
       "subtitle": ""
     }
   ]

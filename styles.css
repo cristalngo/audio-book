@@ -17,6 +17,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -25,7 +29,15 @@ body {
     radial-gradient(circle at top left, rgba(184, 115, 104, 0.16), transparent 34rem),
     var(--paper);
   color: var(--ink);
+  padding-bottom: 32px;
+}
+
+body.has-player {
   padding-bottom: 112px;
+}
+
+body:not(.has-player) .player-bar {
+  display: none !important;
 }
 
 button,
@@ -273,7 +285,6 @@ h2 {
 .text-button,
 .ghost-button,
 .primary-button,
-.chapter-play,
 .round-button {
   border: 0;
   border-radius: 999px;
@@ -295,8 +306,7 @@ h2 {
 }
 
 .primary-button,
-.round-button,
-.chapter-play {
+.round-button {
   background: var(--sage-dark);
   color: #fffdf8;
 }
@@ -344,13 +354,25 @@ h2 {
 
 .chapter-row {
   display: grid;
-  grid-template-columns: 54px minmax(0, 1fr) auto;
+  grid-template-columns: 54px minmax(0, 1fr);
   align-items: center;
   gap: 14px;
+  width: 100%;
   padding: 12px;
   background: rgba(255, 253, 248, 0.78);
   border: 1px solid var(--line);
   border-radius: 8px;
+  color: inherit;
+  text-align: left;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.chapter-row:hover,
+.chapter-row:focus-visible {
+  border-color: rgba(111, 131, 116, 0.72);
+  background: rgba(255, 253, 248, 0.95);
+  outline: none;
+  transform: translateY(-1px);
 }
 
 .chapter-number {
@@ -367,10 +389,6 @@ h2 {
 .chapter-row h3 {
   margin: 0 0 3px;
   font-size: 1rem;
-}
-
-.chapter-play {
-  min-width: 84px;
 }
 
 .player-bar {
@@ -443,8 +461,8 @@ h2 {
 }
 
 @media (max-width: 760px) {
-  body {
-    padding-bottom: 176px;
+  body.has-player {
+    padding-bottom: 150px;
   }
 
   .app-shell,
@@ -487,15 +505,26 @@ h2 {
 
   .chapter-row {
     grid-template-columns: 42px minmax(0, 1fr);
+    min-height: 86px;
   }
 
-  .chapter-play {
-    grid-column: 2;
-    justify-self: start;
+  .book-detail h1 {
+    font-size: clamp(2.1rem, 11vw, 3.35rem);
   }
 
   .player-bar {
     bottom: 10px;
     gap: 10px;
+    padding: 10px;
+  }
+
+  .player-controls {
+    gap: 10px;
+  }
+
+  .round-button {
+    width: 54px;
+    min-height: 54px;
+    flex: 0 0 54px;
   }
 }

@@ -8,6 +8,7 @@ const state = {
   catalog: [],
   currentBook: null,
   currentChapterIndex: 0,
+  routeBook: null,
   playMode: "chapter",
   restoreTime: 0,
   isRefreshing: false
@@ -16,6 +17,7 @@ const state = {
 const els = {
   bookGrid: document.querySelector("#bookGrid"),
   bookCount: document.querySelector("#bookCount"),
+  libraryHero: document.querySelector("#libraryHero"),
   libraryView: document.querySelector("#libraryView"),
   bookView: document.querySelector("#bookView"),
   bookDetail: document.querySelector("#bookDetail"),
@@ -129,44 +131,26 @@ function renderLibrary() {
 }
 
 function renderBook(book) {
-  const resume = getResume();
-  const hasResume = resume && resume.bookId === book.id;
-  const resumeChapter = hasResume ? book.chapters[resume.chapterIndex] : null;
-
   els.bookDetail.innerHTML = `
     <img class="book-cover-large" src="${escapeHtml(book.cover)}" alt="">
     <div>
-      <p class="eyebrow">${escapeHtml(book.author || "Audiobook")}</p>
+      ${book.author ? `<p class="eyebrow">${escapeHtml(book.author)}</p>` : ""}
       <h1>${escapeHtml(book.title)}</h1>
       ${book.subtitle ? `<h2>${escapeHtml(book.subtitle)}</h2>` : ""}
-      <p class="book-description">${escapeHtml(book.description || "")}</p>
-      <div class="detail-actions">
-        <button class="primary-button" type="button" data-action="play-book">Play Book</button>
-        ${hasResume ? `<button class="ghost-button" type="button" data-action="resume-book">Continue: ${escapeHtml(resumeChapter?.title || "Chapter")}</button>` : ""}
-      </div>
+      ${book.description ? `<p class="book-description">${escapeHtml(book.description)}</p>` : ""}
       <div class="chapter-list">
         ${book.chapters.map((chapter, index) => `
-          <article class="chapter-row">
+          <button class="chapter-row" type="button" data-chapter-index="${index}">
             <span class="chapter-number">${index + 1}</span>
             <div>
               <h3>${escapeHtml(chapter.title)}</h3>
               <span class="chapter-meta">${escapeHtml(chapter.duration || "Audio chapter")}</span>
             </div>
-            <button class="chapter-play" type="button" data-chapter-index="${index}">Play</button>
-          </article>
+          </button>
         `).join("")}
       </div>
     </div>
   `;
-
-  els.bookDetail.querySelector("[data-action='play-book']").addEventListener("click", () => {
-    loadChapter(book, 0, { playMode: "book", autoplay: true, startTime: 0 });
-  });
-
-  const resumeBtn = els.bookDetail.querySelector("[data-action='resume-book']");
-  if (resumeBtn) {
-    resumeBtn.addEventListener("click", () => continueListening(true));
-  }
 
   els.bookDetail.querySelectorAll("[data-chapter-index]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -178,13 +162,44 @@ function renderBook(book) {
 async function route() {
   const match = location.hash.match(/^#book\/([^/]+)$/);
   const book = match ? findBook(decodeURIComponent(match[1])) : null;
+  state.routeBook = book || null;
+  document.body.classList.toggle("has-player", Boolean(book));
+  els.libraryHero.hidden = Boolean(book);
   els.libraryView.hidden = Boolean(book);
   els.bookView.hidden = !book;
+  updateResumeUi();
   if (book) {
+    showPlayerForBook(book);
     renderBook(book);
   } else {
+    hidePlayerForLibrary();
     await refreshCatalog();
   }
+}
+
+function showPlayerForBook(book) {
+  els.playerBar.hidden = false;
+  if (state.currentBook?.id === book.id && els.audio.src) return;
+
+  els.audio.pause();
+  els.audio.removeAttribute("src");
+  els.audio.load();
+  state.currentBook = null;
+  state.currentChapterIndex = 0;
+  state.restoreTime = 0;
+  els.playerCover.src = book.cover;
+  els.playerTitle.textContent = book.title;
+  els.playerChapter.textContent = "Select a chapter";
+  els.playPauseBtn.textContent = "Play";
+  els.playPauseBtn.setAttribute("aria-label", "Play");
+  els.seekBar.value = 0;
+  els.currentTime.textContent = "0:00";
+  els.durationTime.textContent = "0:00";
+}
+
+function hidePlayerForLibrary() {
+  if (!els.audio.paused) els.audio.pause();
+  els.playerBar.hidden = true;
 }
 
 function loadChapter(book, chapterIndex, options = {}) {
@@ -195,6 +210,7 @@ function loadChapter(book, chapterIndex, options = {}) {
   state.currentChapterIndex = chapterIndex;
   state.playMode = options.playMode || "chapter";
   state.restoreTime = options.startTime || 0;
+  els.audio.volume = 1;
 
   els.playerBar.hidden = false;
   els.playerCover.src = book.cover;
@@ -226,14 +242,32 @@ function continueListening(autoplay = false) {
   });
 }
 
+function ensurePlayableSelection() {
+  if (els.audio.src) return true;
+
+  const resume = getResume();
+  const resumeBook = resume ? findBook(resume.bookId) : null;
+  const book = state.routeBook || resumeBook || state.catalog[0];
+  if (!book) return false;
+
+  const chapterIndex = resumeBook?.id === book.id ? resume.chapterIndex || 0 : 0;
+  const startTime = resumeBook?.id === book.id ? resume.time || 0 : 0;
+  loadChapter(book, chapterIndex, {
+    playMode: "book",
+    autoplay: false,
+    startTime
+  });
+  return true;
+}
+
 function updateResumeUi() {
   const resume = getResume();
   const book = resume ? findBook(resume.bookId) : null;
   const chapter = book?.chapters?.[resume.chapterIndex || 0];
   const hasResume = Boolean(book && chapter);
 
-  els.resumePanel.hidden = !hasResume;
-  els.headerContinueBtn.hidden = !hasResume;
+  els.resumePanel.hidden = true;
+  els.headerContinueBtn.hidden = true;
   if (!hasResume) return;
 
   els.resumeTitle.textContent = book.title;
@@ -317,7 +351,7 @@ els.backBtn.addEventListener("click", () => {
 });
 
 els.playPauseBtn.addEventListener("click", () => {
-  if (!els.audio.src) return;
+  if (!ensurePlayableSelection()) return;
   if (els.audio.paused) {
     els.audio.play();
   } else {
