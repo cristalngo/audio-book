@@ -131,6 +131,8 @@ function renderLibrary() {
 }
 
 function renderBook(book) {
+  const shouldShowDescription = book.description && book.description !== book.subtitle;
+
   els.bookDetail.innerHTML = `
     <div class="book-heading">
       <img class="book-cover-small" src="${escapeHtml(book.cover)}" alt="">
@@ -138,7 +140,7 @@ function renderBook(book) {
         ${book.author ? `<p class="eyebrow">${escapeHtml(book.author)}</p>` : ""}
         <h1>${escapeHtml(book.title)}</h1>
         ${book.subtitle ? `<h2>${escapeHtml(book.subtitle)}</h2>` : ""}
-        ${book.description ? `<p class="book-description">${escapeHtml(book.description)}</p>` : ""}
+        ${shouldShowDescription ? `<p class="book-description">${escapeHtml(book.description)}</p>` : ""}
       </div>
     </div>
     <div class="chapter-list">
@@ -320,24 +322,83 @@ function formatDurationLabel(duration) {
 }
 
 function placeholderCover(book) {
-  const title = escapeHtml(book.title || "Audiobook");
-  const author = escapeHtml(book.author || book.narrator || "Listener edition");
+  const seed = hashString(`${book.id || ""}:${book.title || ""}`);
+  const palettes = [
+    ["#eadcc4", "#dce7de", "#3f6356", "#f9f0cf", "#b87368"],
+    ["#e6d6ce", "#dce5ec", "#394f68", "#f7e7b0", "#7c6a9a"],
+    ["#efe2c5", "#e3ead9", "#746042", "#fff4c4", "#3f6658"],
+    ["#d9e4df", "#f0dcc8", "#5d4d67", "#fff1d4", "#c38a3e"],
+    ["#e7dfc9", "#d8e4e8", "#6b4d45", "#f8f1dd", "#56766c"],
+    ["#e9d6bc", "#d9eadf", "#365d65", "#fff6cc", "#9b6a4e"]
+  ];
+  const palette = palettes[seed % palettes.length];
+  const titleLines = splitCoverTitle(book.title || "Audiobook");
+  const author = escapeHtml(book.author || book.narrator || "M");
+  const sunX = 300 + (seed % 4) * 90;
+  const sunY = 370 + ((seed >> 3) % 5) * 34;
+  const sunRadius = 112 + ((seed >> 5) % 4) * 18;
+  const waveA = 640 + ((seed >> 7) % 120);
+  const waveB = 690 + ((seed >> 9) % 115);
+  const waveC = 720 + ((seed >> 11) % 105);
+  const pattern = seed % 3;
+  const motif = [
+    `<path d="M146 230 C210 176 276 176 340 230" fill="none" stroke="${palette[4]}" stroke-width="8" opacity="0.42"/>
+     <path d="M560 230 C626 176 694 176 760 230" fill="none" stroke="${palette[2]}" stroke-width="8" opacity="0.26"/>`,
+    `<circle cx="156" cy="226" r="18" fill="${palette[4]}" opacity="0.42"/>
+     <circle cx="730" cy="284" r="28" fill="${palette[3]}" opacity="0.52"/>
+     <circle cx="774" cy="228" r="10" fill="${palette[2]}" opacity="0.28"/>`,
+    `<path d="M120 262 L172 214 L224 262" fill="none" stroke="${palette[4]}" stroke-width="7" opacity="0.42"/>
+     <path d="M682 248 L734 202 L786 248" fill="none" stroke="${palette[2]}" stroke-width="7" opacity="0.26"/>`
+  ][pattern];
+  const titleMarkup = titleLines.map((line, index) => (
+    `<tspan x="450" ${index === 0 ? 'y="168"' : 'dy="74"'}>${escapeHtml(line)}</tspan>`
+  )).join("");
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">
       <defs>
         <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0" stop-color="#e7dbc5"/>
-          <stop offset="0.55" stop-color="#dce5dc"/>
-          <stop offset="1" stop-color="#6f8374"/>
+          <stop offset="0" stop-color="${palette[0]}"/>
+          <stop offset="0.58" stop-color="${palette[1]}"/>
+          <stop offset="1" stop-color="${palette[2]}"/>
         </linearGradient>
       </defs>
       <rect width="900" height="1200" fill="url(#g)"/>
-      <circle cx="450" cy="440" r="154" fill="#fff8df" opacity="0.62"/>
-      <path d="M0 735 C190 662 314 790 480 724 C650 656 760 756 900 700 L900 1200 L0 1200 Z" fill="#405d53" opacity="0.88"/>
-      <text x="450" y="165" text-anchor="middle" font-family="Georgia, serif" font-size="64" fill="#24312c">${title}</text>
-      <text x="450" y="245" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#415d50">${author}</text>
+      <rect x="44" y="44" width="812" height="1112" rx="36" fill="none" stroke="${palette[3]}" stroke-width="3" opacity="0.34"/>
+      ${motif}
+      <circle cx="${sunX}" cy="${sunY}" r="${sunRadius}" fill="${palette[3]}" opacity="0.66"/>
+      <path d="M0 ${waveA} C150 ${waveA - 72} 290 ${waveB + 38} 460 ${waveB - 28} C636 ${waveB - 96} 736 ${waveC + 48} 900 ${waveC - 32} L900 1200 L0 1200 Z" fill="${palette[2]}" opacity="0.9"/>
+      <path d="M0 ${waveA + 86} C194 ${waveA + 12} 304 ${waveB + 116} 500 ${waveB + 48} C652 ${waveB - 8} 778 ${waveC + 112} 900 ${waveC + 46}" fill="none" stroke="${palette[3]}" stroke-width="5" opacity="0.28"/>
+      <text text-anchor="middle" font-family="Georgia, serif" font-size="${titleLines.length > 1 ? 58 : 66}" font-weight="600" fill="#24312c">
+        ${titleMarkup}
+      </text>
+      <text x="450" y="${titleLines.length > 1 ? 318 : 254}" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="${palette[2]}">${author}</text>
     </svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function hashString(value) {
+  return String(value).split("").reduce((hash, char) => (
+    ((hash << 5) - hash + char.charCodeAt(0)) >>> 0
+  ), 2166136261);
+}
+
+function splitCoverTitle(title) {
+  const words = String(title).trim().split(/\s+/);
+  const lines = [];
+  let line = "";
+
+  words.forEach((word) => {
+    const next = line ? `${line} ${word}` : word;
+    if (next.length > 18 && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = next;
+    }
+  });
+
+  if (line) lines.push(line);
+  return lines.slice(0, 3);
 }
 
 function escapeHtml(value) {

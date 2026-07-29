@@ -51,6 +51,8 @@ audio/my-book-id/chapter-02.mp3
 assets/covers/my-book-id.jpg
 ```
 
+If you leave `"cover": ""`, Stillword will generate a calm default cover automatically from the book title and id. Each book gets a slightly different color palette and composition.
+
 4. Add a new book object to `data/catalog.json`:
 
 ```json

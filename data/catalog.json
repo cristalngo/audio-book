@@ -72,6 +72,26 @@
       "description": "",
       "cover": "",
       "updatedAt": "2026-07-29T00:47:08"
+    },
+    {
+      "id": "tam-ly-hoc-cho-su-thay-oi-triet-e",
+      "chapters": [
+        {
+          "id": "ch-001",
+          "title": "Chương 1 – Cấp độ Tâm linh",
+          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/001-ch-ng-1-c-p-t-m-linh.mp3",
+          "duration": 538.274833,
+          "words": 1496,
+          "order": 1
+        }
+      ],
+      "title": "Tâm lý học cho sự thay đổi triệt để",
+      "author": "Samael Aun Weor",
+      "subtitle": "",
+      "narrator": "Thảo Nguyên",
+      "description": "",
+      "cover": "",
+      "updatedAt": "2026-07-29T00:59:15"
     }
   ]
 }
