@@ -121,6 +121,14 @@
           "duration": 238.894333,
           "words": 781,
           "order": 7
+        },
+        {
+          "id": "ch-008-ms6p2wlp",
+          "title": "Chương 8 – Trạng thái sai lầm",
+          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/008-ch-ng-8-tr-ng-th-i-sai-l-m.mp3",
+          "duration": 283.22075,
+          "words": 888,
+          "order": 8
         }
       ],
       "title": "Tâm lý học cho sự thay đổi triệt để",
@@ -129,7 +137,7 @@
       "narrator": "Thảo Nguyên",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T17:52:58",
+      "updatedAt": "2026-07-29T18:21:20",
       "language": "vi",
       "publishedAt": "2026-07-29"
     },
