@@ -3,9 +3,12 @@ const catalogSources = [
   { url: "./data/catalog.json", assetBase: "./" }
 ];
 const storageKey = "audiobookSanctuary.resume.v1";
+const hiddenBooksStorageKey = "stillword.hiddenBooks.v1";
 
 const state = {
   catalog: [],
+  hiddenBookIds: getHiddenBookIds(),
+  showHiddenBooks: false,
   currentBook: null,
   currentChapterIndex: 0,
   routeBook: null,
@@ -17,6 +20,8 @@ const state = {
 const els = {
   bookGrid: document.querySelector("#bookGrid"),
   bookCount: document.querySelector("#bookCount"),
+  hiddenToggleBtn: document.querySelector("#hiddenToggleBtn"),
+  hiddenBooksPanel: document.querySelector("#hiddenBooksPanel"),
   libraryHero: document.querySelector("#libraryHero"),
   libraryView: document.querySelector("#libraryView"),
   bookView: document.querySelector("#bookView"),
@@ -105,8 +110,15 @@ function resolveAsset(path, assetBase) {
 }
 
 function renderLibrary() {
-  els.bookCount.textContent = `${state.catalog.length} audiobook${state.catalog.length === 1 ? "" : "s"}`;
-  els.bookGrid.innerHTML = state.catalog.length ? state.catalog.map((book) => `
+  const visibleBooks = state.catalog.filter((book) => !state.hiddenBookIds.has(book.id));
+  const hiddenBooks = state.catalog.filter((book) => state.hiddenBookIds.has(book.id));
+
+  els.bookCount.textContent = hiddenBooks.length
+    ? `${visibleBooks.length} shown, ${hiddenBooks.length} hidden`
+    : `${visibleBooks.length} audiobook${visibleBooks.length === 1 ? "" : "s"}`;
+  els.hiddenToggleBtn.hidden = hiddenBooks.length === 0;
+  els.hiddenToggleBtn.textContent = state.showHiddenBooks ? "Hide hidden" : `Hidden (${hiddenBooks.length})`;
+  els.bookGrid.innerHTML = visibleBooks.length ? visibleBooks.map((book) => `
     <article class="book-card" data-book-id="${escapeHtml(book.id)}">
       <button class="book-open" type="button" data-action="open-book" aria-label="Open ${escapeHtml(book.title)}">
         <img src="${escapeHtml(book.cover)}" alt="">
@@ -117,15 +129,37 @@ function renderLibrary() {
         <span class="card-meta">${book.chapters.length} chapter${book.chapters.length === 1 ? "" : "s"}</span>
         <div class="card-actions">
           <button class="primary-button small-button" type="button" data-action="open-book">Listen</button>
+          <button class="text-button small-text-button" type="button" data-action="hide-book">Hide</button>
         </div>
       </div>
     </article>
   `).join("") : `<p class="empty-state">No books in your library right now.</p>`;
+  els.hiddenBooksPanel.hidden = !state.showHiddenBooks || hiddenBooks.length === 0;
+  els.hiddenBooksPanel.innerHTML = hiddenBooks.map((book) => `
+    <div class="hidden-book-row" data-book-id="${escapeHtml(book.id)}">
+      <span>${escapeHtml(book.title)}</span>
+      <button class="text-button small-text-button" type="button" data-action="restore-book">Restore</button>
+    </div>
+  `).join("");
 
   els.bookGrid.querySelectorAll("[data-action='open-book']").forEach((button) => {
     button.addEventListener("click", () => {
       const card = button.closest("[data-book-id]");
       location.hash = `book/${card.dataset.bookId}`;
+    });
+  });
+
+  els.bookGrid.querySelectorAll("[data-action='hide-book']").forEach((button) => {
+    button.addEventListener("click", () => {
+      const card = button.closest("[data-book-id]");
+      hideBook(card.dataset.bookId);
+    });
+  });
+
+  els.hiddenBooksPanel.querySelectorAll("[data-action='restore-book']").forEach((button) => {
+    button.addEventListener("click", () => {
+      const row = button.closest("[data-book-id]");
+      restoreBook(row.dataset.bookId);
     });
   });
 }
@@ -304,6 +338,30 @@ function findBook(bookId) {
   return state.catalog.find((book) => book.id === bookId);
 }
 
+function getHiddenBookIds() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(hiddenBooksStorageKey) || "[]"));
+  } catch {
+    return new Set();
+  }
+}
+
+function saveHiddenBookIds() {
+  localStorage.setItem(hiddenBooksStorageKey, JSON.stringify([...state.hiddenBookIds]));
+}
+
+function hideBook(bookId) {
+  state.hiddenBookIds.add(bookId);
+  saveHiddenBookIds();
+  renderLibrary();
+}
+
+function restoreBook(bookId) {
+  state.hiddenBookIds.delete(bookId);
+  saveHiddenBookIds();
+  renderLibrary();
+}
+
 function withCacheBust(url) {
   const separator = url.includes("?") ? "&" : "?";
   return `${url}${separator}t=${Date.now()}`;
@@ -472,6 +530,11 @@ els.audio.addEventListener("error", () => {
 });
 
 els.heroContinueBtn.addEventListener("click", () => continueListening(true));
+
+els.hiddenToggleBtn.addEventListener("click", () => {
+  state.showHiddenBooks = !state.showHiddenBooks;
+  renderLibrary();
+});
 els.headerContinueBtn.addEventListener("click", () => continueListening(true));
 window.addEventListener("hashchange", route);
 

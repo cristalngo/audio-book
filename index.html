@@ -12,7 +12,7 @@
     <link rel="icon" href="./assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=book-heading-balance-8">
+    <link rel="stylesheet" href="./styles.css?v=local-hide-books-9">
   </head>
   <body>
     <div class="app-shell">
@@ -45,9 +45,13 @@
         <section id="libraryView" class="view">
           <div class="section-heading">
             <h2>Library</h2>
-            <p id="bookCount"></p>
+            <div class="library-tools">
+              <p id="bookCount"></p>
+              <button class="text-button small-text-button" id="hiddenToggleBtn" type="button" hidden>Hidden</button>
+            </div>
           </div>
           <div class="book-grid" id="bookGrid"></div>
+          <div class="hidden-books" id="hiddenBooksPanel" hidden></div>
         </section>
 
         <section id="bookView" class="view book-view" hidden>
@@ -78,6 +82,6 @@
       <audio id="audioPlayer" preload="metadata"></audio>
     </aside>
 
-    <script src="./app.js?v=book-heading-balance-8" defer></script>
+    <script src="./app.js?v=local-hide-books-9" defer></script>
   </body>
 </html>

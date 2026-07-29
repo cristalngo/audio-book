@@ -54,33 +54,13 @@
       "subtitle": ""
     },
     {
-      "id": "binh-minh-tuoi-tre",
-      "chapters": [
-        {
-          "id": "ch-001",
-          "title": "Lời giới thiệu",
-          "src": "audio/binh-minh-tuoi-tre/001-l-i-gi-i-thi-u.mp3",
-          "duration": 366.5305,
-          "words": 957,
-          "order": 1
-        }
-      ],
-      "title": "Bình minh tuổi trẻ",
-      "author": "M",
-      "subtitle": "Khai mở nguồn năng lượng tối thượng của Thiên nhiên cho sức khỏe, hạnh phúc và sự thăng hoa tâm linh.",
-      "narrator": "Thảo Nguyên",
-      "description": "",
-      "cover": "",
-      "updatedAt": "2026-07-29T00:47:08"
-    },
-    {
       "id": "tam-ly-hoc-cho-su-thay-oi-triet-e",
       "chapters": [
         {
           "id": "ch-001",
           "title": "Chương 1 – Cấp độ Tâm linh",
           "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/001-ch-ng-1-c-p-t-m-linh.mp3",
-          "duration": 538.274833,
+          "duration": 554.668667,
           "words": 1496,
           "order": 1
         }
@@ -91,7 +71,7 @@
       "narrator": "Thảo Nguyên",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T01:01:21"
+      "updatedAt": "2026-07-29T01:13:16"
     }
   ]
 }
