@@ -94,9 +94,17 @@
           "id": "ch-005-ms6kyedy",
           "title": "Chương 5 – Buộc tội bản thân",
           "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/005-ch-ng-5-bu-c-t-i-b-n-th-n.mp3",
-          "duration": 253.6045,
+          "duration": 253.261583,
           "words": 805,
           "order": 5
+        },
+        {
+          "id": "ch-006-ms6lnnyc",
+          "title": "Chapter 6 - CUỘC SỐNG",
+          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/006-chapter-6-cu-c-s-ng.mp3",
+          "duration": 183.493667,
+          "words": 566,
+          "order": 6
         }
       ],
       "title": "Tâm lý học cho sự thay đổi triệt để",
@@ -105,7 +113,7 @@
       "narrator": "Thảo Nguyên",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T16:19:36",
+      "updatedAt": "2026-07-29T16:34:58",
       "language": "vi",
       "publishedAt": "2026-07-29"
     },
