@@ -4,6 +4,11 @@ const catalogSources = [
 ];
 const storageKey = "audiobookSanctuary.resume.v1";
 const hiddenBooksStorageKey = "stillword.hiddenBooks.v1";
+const excludedBookIds = new Set(["binh-minh-tuoi-tre"]);
+const knownCoverPaths = {
+  "dayspring-of-youth": "./assets/covers/dayspring-of-youth.jpg?v=1",
+  "tam-ly-hoc-cho-su-thay-oi-triet-e": "./assets/covers/tam-ly-hoc-cho-su-thay-doi-triet-de.jpg?v=1"
+};
 
 const state = {
   catalog: [],
@@ -88,10 +93,10 @@ async function refreshCatalog() {
 }
 
 function normalizeCatalog(books, assetBase) {
-  return books.map((book) => ({
+  return books.filter((book) => !excludedBookIds.has(book.id)).map((book) => ({
     ...book,
     author: book.author || book.narrator || "",
-    cover: resolveAsset(book.cover, assetBase) || placeholderCover(book),
+    cover: resolveAsset(book.cover, assetBase) || knownCover(book.id) || placeholderCover(book),
     description: book.description || book.subtitle || "",
     chapters: [...(book.chapters || [])]
       .sort((a, b) => (a.order || 0) - (b.order || 0))
@@ -101,6 +106,10 @@ function normalizeCatalog(books, assetBase) {
         src: resolveAsset(chapter.src, assetBase)
       }))
   }));
+}
+
+function knownCover(bookId) {
+  return knownCoverPaths[bookId] || "";
 }
 
 function resolveAsset(path, assetBase) {
