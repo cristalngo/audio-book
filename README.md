@@ -92,3 +92,23 @@ listener-export/audio/ -> audiobook-listener/audio/
 ```
 
 After copying, the same catalog chapter paths such as `audio/my-book-id/chapter-01.mp3` will work online.
+
+## Share A Book With Cover Preview
+
+Social apps usually cannot read the book id from hash links such as:
+
+```text
+https://cristalngo.github.io/audio-book/#book/my-book-id
+```
+
+For rich previews with the book title, author/description, and cover, share the generated book page instead:
+
+```text
+https://cristalngo.github.io/audio-book/books/my-book-id/
+```
+
+Run this after updating `data/catalog.json` to regenerate those pages:
+
+```sh
+node tools/generate-share-pages.mjs
+```
