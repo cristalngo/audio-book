@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Dayspring of Youth</title>
+  <desc id="desc">A refined abstract audiobook cover with warm dawn light, quiet paper texture, and horizon-like shapes.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f5e3bd"/>
+      <stop offset="0.46" stop-color="#e9ead8"/>
+      <stop offset="1" stop-color="#6f8b7e"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="52%" cy="47%" r="38%">
+      <stop offset="0" stop-color="#fff6bd" stop-opacity="0.92"/>
+      <stop offset="0.54" stop-color="#fff6bd" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#fff6bd" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="3" seed="11"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.08"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="900" height="1200" fill="url(#bg)"/>
+  <rect width="900" height="1200" filter="url(#grain)" opacity="0.34"/>
+  <circle cx="468" cy="536" r="280" fill="url(#sun)"/>
+  <path d="M86 486 C188 388 300 392 408 498" fill="none" stroke="#c9907b" stroke-width="8" opacity="0.52"/>
+  <path d="M500 470 C604 378 720 382 812 486" fill="none" stroke="#527063" stroke-width="8" opacity="0.46"/>
+  <path d="M0 784 C160 702 306 810 464 736 C630 658 742 778 900 702 L900 1200 L0 1200 Z" fill="#4f6f62" opacity="0.9"/>
+  <path d="M0 890 C172 816 314 912 492 836 C656 766 772 884 900 824 L900 1200 L0 1200 Z" fill="#2e5148" opacity="0.66"/>
+  <path d="M0 1000 C184 946 312 1026 496 966 C654 914 774 994 900 946 L900 1200 L0 1200 Z" fill="#263f39" opacity="0.5"/>
+  <g fill="none" stroke="#fff7d9" stroke-width="4" opacity="0.34">
+    <circle cx="468" cy="536" r="112"/>
+    <circle cx="468" cy="536" r="178"/>
+    <circle cx="468" cy="536" r="244"/>
+  </g>
+  <text x="86" y="136" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="5" fill="#527063">M</text>
+  <text x="86" y="250" font-family="Georgia, 'Times New Roman', serif" font-size="78" font-weight="600" fill="#24312c">
+    <tspan x="86" dy="0">Dayspring</tspan>
+    <tspan x="86" dy="88">of Youth</tspan>
+  </text>
+  <path d="M86 390 H354" stroke="#24312c" stroke-width="2" opacity="0.32"/>
+</svg>

@@ -131,7 +131,14 @@ function renderLibrary() {
           <button class="primary-button small-button" type="button" data-action="open-book">Listen</button>
         </div>
       </div>
-      <button class="hide-book-button" type="button" data-action="hide-book" aria-label="Hide ${escapeHtml(book.title)}">×</button>
+      <button class="hide-book-button" type="button" data-action="hide-book" aria-label="Hide ${escapeHtml(book.title)}">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 3l18 18"/>
+          <path d="M10.6 10.6A2 2 0 0 0 12 14a2 2 0 0 0 1.4-.6"/>
+          <path d="M9.1 5.4A9.8 9.8 0 0 1 12 5c5 0 8.5 4.6 9.5 7a11.7 11.7 0 0 1-2.1 3.1"/>
+          <path d="M6.4 6.9A11.6 11.6 0 0 0 2.5 12c1 2.4 4.5 7 9.5 7 1.4 0 2.7-.4 3.8-1"/>
+        </svg>
+      </button>
     </article>
   `).join("") : `<p class="empty-state">No books in your library right now.</p>`;
   els.hiddenBooksPanel.hidden = !state.showHiddenBooks || hiddenBooks.length === 0;

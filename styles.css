@@ -302,11 +302,18 @@ h2 {
   border-radius: 999px;
   background: rgba(255, 253, 248, 0.82);
   color: var(--sage-dark);
-  font-size: 1.15rem;
-  font-weight: 700;
-  line-height: 1;
   opacity: 0;
   transition: opacity 140ms ease, background 140ms ease, border-color 140ms ease;
+}
+
+.hide-book-button svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 
 .book-card:hover .hide-book-button,
