@@ -174,6 +174,102 @@ function resolveAsset(path, assetBase) {
   return `${assetBase}${path.replace(/^\.\//, "")}`;
 }
 
+function absoluteUrl(path) {
+  try {
+    return new URL(path, window.location.href).href;
+  } catch {
+    return path;
+  }
+}
+
+function mediaArtworkType(path) {
+  const cleanPath = String(path || "").split("?")[0].toLowerCase();
+  if (cleanPath.endsWith(".png")) return "image/png";
+  if (cleanPath.endsWith(".webp")) return "image/webp";
+  return "image/jpeg";
+}
+
+function updateMediaSession(book, chapter) {
+  if (!("mediaSession" in navigator) || !window.MediaMetadata) return;
+
+  const artworkSrc = absoluteUrl(book.cover);
+  const artworkType = mediaArtworkType(book.cover);
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: chapter?.title || book.title,
+    artist: book.author || book.narrator || "Stillword",
+    album: book.title,
+    artwork: [
+      { src: artworkSrc, sizes: "96x96", type: artworkType },
+      { src: artworkSrc, sizes: "128x128", type: artworkType },
+      { src: artworkSrc, sizes: "192x192", type: artworkType },
+      { src: artworkSrc, sizes: "256x256", type: artworkType },
+      { src: artworkSrc, sizes: "512x512", type: artworkType }
+    ]
+  });
+}
+
+function setMediaPlaybackState(playbackState) {
+  if (!("mediaSession" in navigator)) return;
+  navigator.mediaSession.playbackState = playbackState;
+}
+
+function seekRelative(offset) {
+  const duration = els.audio.duration || 0;
+  const nextTime = Math.min(Math.max(0, els.audio.currentTime + offset), duration || Number.MAX_SAFE_INTEGER);
+  els.audio.currentTime = nextTime;
+}
+
+function playNextChapter() {
+  if (!state.currentBook) return;
+  const nextIndex = state.currentChapterIndex + 1;
+  if (nextIndex < state.currentBook.chapters.length) {
+    loadChapter(state.currentBook, nextIndex, { playMode: "book", autoplay: true, startTime: 0 });
+  }
+}
+
+function playPreviousChapter() {
+  if (!state.currentBook) return;
+  if (els.audio.currentTime > 5 || state.currentChapterIndex === 0) {
+    els.audio.currentTime = 0;
+    saveResume(0);
+    return;
+  }
+  loadChapter(state.currentBook, state.currentChapterIndex - 1, {
+    playMode: "book",
+    autoplay: true,
+    startTime: 0
+  });
+}
+
+function setupMediaSessionActions() {
+  if (!("mediaSession" in navigator)) return;
+
+  const setAction = (action, handler) => {
+    try {
+      navigator.mediaSession.setActionHandler(action, handler);
+    } catch {
+      // Some browsers expose Media Session but not every action.
+    }
+  };
+
+  setAction("play", () => {
+    if (ensurePlayableSelection()) els.audio.play();
+  });
+  setAction("pause", () => els.audio.pause());
+  setAction("seekbackward", (details = {}) => seekRelative(-(details.seekOffset || 10)));
+  setAction("seekforward", (details = {}) => seekRelative(details.seekOffset || 10));
+  setAction("previoustrack", playPreviousChapter);
+  setAction("nexttrack", playNextChapter);
+  setAction("seekto", (details = {}) => {
+    if (!Number.isFinite(details.seekTime)) return;
+    if (details.fastSeek && "fastSeek" in els.audio) {
+      els.audio.fastSeek(details.seekTime);
+    } else {
+      els.audio.currentTime = details.seekTime;
+    }
+  });
+}
+
 function renderLibrary() {
   const visibleBooks = state.catalog.filter((book) => !state.hiddenBookIds.has(book.id));
   const hiddenBooks = state.catalog.filter((book) => state.hiddenBookIds.has(book.id));
@@ -342,6 +438,8 @@ function loadChapter(book, chapterIndex, options = {}) {
   els.playPauseBtn.textContent = "Play";
   els.playPauseBtn.setAttribute("aria-label", "Play");
   els.audio.src = chapter.src;
+  updateMediaSession(book, chapter);
+  setMediaPlaybackState("paused");
   els.audio.load();
   saveResume(state.restoreTime);
 
@@ -594,11 +692,13 @@ els.audio.addEventListener("loadedmetadata", () => {
 els.audio.addEventListener("play", () => {
   els.playPauseBtn.textContent = "Pause";
   els.playPauseBtn.setAttribute("aria-label", "Pause");
+  setMediaPlaybackState("playing");
 });
 
 els.audio.addEventListener("pause", () => {
   els.playPauseBtn.textContent = "Play";
   els.playPauseBtn.setAttribute("aria-label", "Play");
+  setMediaPlaybackState("paused");
   saveResume();
 });
 
@@ -619,10 +719,7 @@ els.seekBar.addEventListener("input", () => {
 els.audio.addEventListener("ended", () => {
   saveResume(0);
   if (state.playMode !== "book" || !state.currentBook) return;
-  const nextIndex = state.currentChapterIndex + 1;
-  if (nextIndex < state.currentBook.chapters.length) {
-    loadChapter(state.currentBook, nextIndex, { playMode: "book", autoplay: true, startTime: 0 });
-  }
+  playNextChapter();
 });
 
 els.audio.addEventListener("error", () => {
@@ -638,4 +735,5 @@ els.hiddenToggleBtn.addEventListener("click", () => {
 els.headerContinueBtn.addEventListener("click", () => continueListening(true));
 window.addEventListener("hashchange", route);
 
+setupMediaSessionActions();
 init();
