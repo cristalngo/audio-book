@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Desert Prayers cover</title>
+  <desc id="desc">A contemplative desert cover with layered hills and a pale moon.</desc>
+  <defs>
+    <linearGradient id="dusk" x1="0" x2="0.8" y1="0" y2="1">
+      <stop offset="0" stop-color="#e9c7b1"/>
+      <stop offset="0.55" stop-color="#d8d8bd"/>
+      <stop offset="1" stop-color="#7b7065"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" fill="url(#dusk)"/>
+  <circle cx="674" cy="258" r="82" fill="#fff6dc" opacity="0.78"/>
+  <path d="M0 610 C168 520 266 602 382 554 C512 499 647 564 900 454 L900 1200 L0 1200 Z" fill="#856f62" opacity="0.82"/>
+  <path d="M0 744 C150 682 294 748 430 688 C610 609 742 716 900 650 L900 1200 L0 1200 Z" fill="#465d54" opacity="0.92"/>
+  <path d="M0 908 C170 838 304 946 478 866 C620 800 734 886 900 824 L900 1200 L0 1200 Z" fill="#28342f" opacity="0.88"/>
+  <text x="450" y="160" text-anchor="middle" font-family="Georgia, serif" font-size="78" fill="#26322d">Desert Prayers</text>
+  <text x="450" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" letter-spacing="5" fill="#455d53">A CONTEMPLATIVE AUDIOBOOK</text>
+</svg>

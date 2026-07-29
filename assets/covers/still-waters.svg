@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Still Waters cover</title>
+  <desc id="desc">A calm abstract lake cover with warm sunrise colors.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#d7e2d4"/>
+      <stop offset="0.52" stop-color="#f3dec0"/>
+      <stop offset="1" stop-color="#6f8374"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" fill="url(#sky)"/>
+  <circle cx="450" cy="440" r="142" fill="#fff8df" opacity="0.72"/>
+  <path d="M0 672 C160 610 280 736 450 674 C628 610 734 734 900 672 L900 1200 L0 1200 Z" fill="#405d53" opacity="0.9"/>
+  <path d="M72 778 C242 724 331 822 486 774 C642 725 742 816 840 780" fill="none" stroke="#f7ead4" stroke-width="18" opacity="0.52"/>
+  <path d="M96 872 C270 824 386 918 548 862 C684 815 759 876 830 852" fill="none" stroke="#d9c798" stroke-width="12" opacity="0.52"/>
+  <text x="450" y="160" text-anchor="middle" font-family="Georgia, serif" font-size="86" fill="#26322d">Still Waters</text>
+  <text x="450" y="236" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" letter-spacing="5" fill="#405d53">THREE QUIET MEDITATIONS</text>
+</svg>
