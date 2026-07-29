@@ -19,6 +19,14 @@
           "duration": 1450.854542,
           "words": 3191,
           "order": 2
+        },
+        {
+          "id": "ch-003-ms5lcf5x",
+          "title": "Chapter 2: The Nous Atom",
+          "src": "audio/dayspring-of-youth/003-chapter-2-the-nous-atom.mp3",
+          "duration": 913.4445,
+          "words": 1957,
+          "order": 3
         }
       ],
       "title": "Dayspring of Youth",
@@ -26,7 +34,7 @@
       "narrator": "Brian M",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-28T23:33:42",
+      "updatedAt": "2026-07-28T23:39:37",
       "subtitle": ""
     }
   ]

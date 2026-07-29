@@ -132,23 +132,25 @@ function renderLibrary() {
 
 function renderBook(book) {
   els.bookDetail.innerHTML = `
-    <img class="book-cover-large" src="${escapeHtml(book.cover)}" alt="">
-    <div>
-      ${book.author ? `<p class="eyebrow">${escapeHtml(book.author)}</p>` : ""}
-      <h1>${escapeHtml(book.title)}</h1>
-      ${book.subtitle ? `<h2>${escapeHtml(book.subtitle)}</h2>` : ""}
-      ${book.description ? `<p class="book-description">${escapeHtml(book.description)}</p>` : ""}
-      <div class="chapter-list">
-        ${book.chapters.map((chapter, index) => `
-          <button class="chapter-row" type="button" data-chapter-index="${index}">
-            <span class="chapter-number">${index + 1}</span>
-            <div>
-              <h3>${escapeHtml(chapter.title)}</h3>
-              <span class="chapter-meta">${escapeHtml(chapter.duration || "Audio chapter")}</span>
-            </div>
-          </button>
-        `).join("")}
+    <div class="book-heading">
+      <img class="book-cover-small" src="${escapeHtml(book.cover)}" alt="">
+      <div>
+        ${book.author ? `<p class="eyebrow">${escapeHtml(book.author)}</p>` : ""}
+        <h1>${escapeHtml(book.title)}</h1>
+        ${book.subtitle ? `<h2>${escapeHtml(book.subtitle)}</h2>` : ""}
+        ${book.description ? `<p class="book-description">${escapeHtml(book.description)}</p>` : ""}
       </div>
+    </div>
+    <div class="chapter-list">
+      ${book.chapters.map((chapter, index) => `
+        <button class="chapter-row" type="button" data-chapter-index="${index}">
+          <span class="chapter-number">${index + 1}</span>
+          <div>
+            <h3>${escapeHtml(chapter.title)}</h3>
+            <span class="chapter-meta">${escapeHtml(chapter.duration || "Audio chapter")}</span>
+          </div>
+        </button>
+      `).join("")}
     </div>
   `;
 
@@ -163,7 +165,6 @@ async function route() {
   const match = location.hash.match(/^#book\/([^/]+)$/);
   const book = match ? findBook(decodeURIComponent(match[1])) : null;
   state.routeBook = book || null;
-  document.body.classList.toggle("has-player", Boolean(book));
   els.libraryHero.hidden = Boolean(book);
   els.libraryView.hidden = Boolean(book);
   els.bookView.hidden = !book;
@@ -172,12 +173,14 @@ async function route() {
     showPlayerForBook(book);
     renderBook(book);
   } else {
-    hidePlayerForLibrary();
     await refreshCatalog();
+    showPlayerForLibrary();
   }
 }
 
 function showPlayerForBook(book) {
+  document.body.classList.add("has-player");
+  document.body.classList.remove("mini-player");
   els.playerBar.hidden = false;
   if (state.currentBook?.id === book.id && els.audio.src) return;
 
@@ -197,9 +200,11 @@ function showPlayerForBook(book) {
   els.durationTime.textContent = "0:00";
 }
 
-function hidePlayerForLibrary() {
-  if (!els.audio.paused) els.audio.pause();
-  els.playerBar.hidden = true;
+function showPlayerForLibrary() {
+  const hasLoadedAudio = Boolean(state.currentBook && els.audio.src);
+  document.body.classList.toggle("has-player", hasLoadedAudio);
+  document.body.classList.toggle("mini-player", hasLoadedAudio);
+  els.playerBar.hidden = !hasLoadedAudio;
 }
 
 function loadChapter(book, chapterIndex, options = {}) {
@@ -266,7 +271,7 @@ function updateResumeUi() {
   const chapter = book?.chapters?.[resume.chapterIndex || 0];
   const hasResume = Boolean(book && chapter);
 
-  els.resumePanel.hidden = true;
+  els.resumePanel.hidden = Boolean(state.routeBook) || !hasResume;
   els.headerContinueBtn.hidden = true;
   if (!hasResume) return;
 
