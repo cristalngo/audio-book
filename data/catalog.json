@@ -92,6 +92,26 @@
       "updatedAt": "2026-07-29T12:21:16",
       "language": "vi",
       "publishedAt": "2026-07-29"
+    },
+    {
+      "id": "bong-hong-cai-ao",
+      "chapters": [
+        {
+          "id": "ch-001",
+          "title": "Bông hồng cài áo",
+          "src": "audio/bong-hong-cai-ao/001-b-ng-h-ng-c-i-o.mp3",
+          "duration": 1117.850708,
+          "words": 2527,
+          "order": 1
+        }
+      ],
+      "title": "Bông hồng cài áo",
+      "author": "Thích Nhất Hạnh",
+      "subtitle": "",
+      "narrator": "Minh Ngọc",
+      "description": "",
+      "cover": "",
+      "updatedAt": "2026-07-29T16:00:55"
     }
   ]
 }
