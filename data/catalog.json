@@ -81,6 +81,22 @@
           "duration": 254.113958,
           "words": 819,
           "order": 3
+        },
+        {
+          "id": "ch-004-ms6ktc5q",
+          "title": "Chương 4 – Phật tính",
+          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/004-ch-ng-4-ph-t-t-nh.mp3",
+          "duration": 215.943667,
+          "words": 704,
+          "order": 4
+        },
+        {
+          "id": "ch-005-ms6kyedy",
+          "title": "Chương 5 – Buộc tội bản thân",
+          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/005-ch-ng-5-bu-c-t-i-b-n-th-n.mp3",
+          "duration": 253.6045,
+          "words": 805,
+          "order": 5
         }
       ],
       "title": "Tâm lý học cho sự thay đổi triệt để",
@@ -89,7 +105,7 @@
       "narrator": "Thảo Nguyên",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T16:07:06",
+      "updatedAt": "2026-07-29T16:19:36",
       "language": "vi",
       "publishedAt": "2026-07-29"
     },
@@ -110,8 +126,10 @@
       "subtitle": "",
       "narrator": "Minh Ngọc",
       "description": "",
-      "cover": "",
-      "updatedAt": "2026-07-29T16:00:55"
+      "cover": "assets/covers/bong-hong-cai-ao.jpg?v=1",
+      "updatedAt": "2026-07-29T16:00:55",
+      "language": "vi",
+      "publishedAt": "2026-07-29"
     }
   ]
 }

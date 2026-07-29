@@ -7,7 +7,8 @@ const hiddenBooksStorageKey = "stillword.hiddenBooks.v1";
 const excludedBookIds = new Set(["binh-minh-tuoi-tre"]);
 const knownCoverPaths = {
   "dayspring-of-youth": "./assets/covers/dayspring-of-youth.jpg?v=1",
-  "tam-ly-hoc-cho-su-thay-oi-triet-e": "./assets/covers/tam-ly-hoc-cho-su-thay-doi-triet-de.jpg?v=1"
+  "tam-ly-hoc-cho-su-thay-oi-triet-e": "./assets/covers/tam-ly-hoc-cho-su-thay-doi-triet-de.jpg?v=1",
+  "bong-hong-cai-ao": "./assets/covers/bong-hong-cai-ao.jpg?v=1"
 };
 
 const state = {
