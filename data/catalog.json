@@ -102,9 +102,17 @@
           "id": "ch-006-ms6lnnyc",
           "title": "Chương 6 - Cuộc sống",
           "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/006-ch-ng-6-cu-c-s-ng.mp3",
-          "duration": 183.493667,
+          "duration": 184.49125,
           "words": 566,
           "order": 6
+        },
+        {
+          "id": "ch-007-ms6magvu",
+          "title": "Chương 7 – Trạng thái nội tâm",
+          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/007-ch-ng-7-tr-ng-th-i-n-i-t-m.mp3",
+          "duration": 238.894333,
+          "words": 781,
+          "order": 7
         }
       ],
       "title": "Tâm lý học cho sự thay đổi triệt để",
@@ -113,7 +121,7 @@
       "narrator": "Thảo Nguyên",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T16:48:28",
+      "updatedAt": "2026-07-29T17:41:10",
       "language": "vi",
       "publishedAt": "2026-07-29"
     },
