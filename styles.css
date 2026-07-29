@@ -645,26 +645,34 @@ body.mini-player .round-button {
   }
 
   .book-card {
-    grid-template-columns: clamp(104px, 28vw, 132px) minmax(0, 1fr);
+    grid-template-columns: clamp(104px, 30vw, 124px) minmax(0, 1fr);
     grid-template-rows: auto;
-    align-items: start;
-    gap: 14px;
+    align-items: center;
+    gap: 13px;
     border-color: rgba(222, 216, 204, 0.78);
-    padding: 10px;
+    padding: 10px 12px 10px 10px;
     box-shadow: 0 8px 20px rgba(68, 56, 42, 0.07);
   }
 
   .book-card > div {
     min-width: 0;
-    padding-right: 34px;
+    padding-right: 30px;
   }
 
   .hide-book-button {
-    top: 8px;
-    right: 8px;
-    width: 28px;
-    height: 28px;
-    opacity: 1;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    border-color: rgba(222, 216, 204, 0.58);
+    background: rgba(255, 253, 248, 0.64);
+    opacity: 0.82;
+  }
+
+  .hide-book-button svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 1.65;
   }
 
   .book-card:hover,
@@ -674,40 +682,40 @@ body.mini-player .round-button {
 
   .book-card img {
     aspect-ratio: 3 / 4;
-    min-height: 138px;
+    min-height: 0;
     border-radius: 5px;
   }
 
   .book-card h3 {
     display: -webkit-box;
-    margin: 2px 0 8px;
+    margin: 0 0 8px;
     overflow: hidden;
-    font-size: clamp(1.04rem, 4.2vw, 1.28rem);
-    line-height: 1.12;
+    font-size: clamp(0.98rem, 3.7vw, 1.12rem);
+    line-height: 1.16;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
   }
 
   .book-meta-list {
-    gap: 6px;
-    margin-top: 8px;
+    gap: 5px;
+    margin-top: 0;
   }
 
   .book-meta-list span {
-    min-height: 24px;
-    padding: 0 8px;
-    font-size: 0.73rem;
+    min-height: 21px;
+    padding: 0 7px;
+    font-size: 0.66rem;
     line-height: 1;
   }
 
   .card-actions {
-    margin-top: 14px;
+    margin-top: 12px;
   }
 
   .small-button {
-    min-height: 34px;
-    padding: 0 15px;
-    font-size: 0.84rem;
+    min-height: 31px;
+    padding: 0 14px;
+    font-size: 0.78rem;
   }
 
   .small-text-button {
