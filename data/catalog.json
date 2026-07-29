@@ -8,8 +8,8 @@
           "id": "ch-001",
           "title": "Introduction",
           "src": "audio/dayspring-of-youth/001-introduction.mp3",
-          "duration": 318.642,
-          "words": 618,
+          "duration": 315.854167,
+          "words": 620,
           "order": 1
         },
         {
@@ -22,11 +22,12 @@
         }
       ],
       "title": "Dayspring of Youth",
-      "author": "",
-      "narrator": "",
+      "author": "M",
+      "narrator": "Brian M",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-28T22:30:24"
+      "updatedAt": "2026-07-28T22:58:55",
+      "subtitle": ""
     }
   ]
 }

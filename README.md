@@ -28,7 +28,7 @@ If the export catalog is not available, the site falls back to the sample catalo
 
 The library refreshes the catalog each time you return to the library view. If Audiobook Studio exports a new book while the listener is open, go back to the library and the new book should appear.
 
-The Delete button removes a book from the listener library on the current device by saving that preference in `localStorage`. Because this is a static GitHub Pages site, it does not delete MP3 files or edit the JSON catalog on disk.
+The listener library is fixed by the catalog. To remove a book from the published site, remove it from `data/catalog.json` and remove its audio folder before uploading.
 
 ## Add A New Audiobook
 

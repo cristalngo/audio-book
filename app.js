@@ -3,11 +3,9 @@ const catalogSources = [
   { url: "./data/catalog.json", assetBase: "./" }
 ];
 const storageKey = "audiobookSanctuary.resume.v1";
-const deletedBooksKey = "audiobookSanctuary.deletedBooks.v1";
 
 const state = {
   catalog: [],
-  allBooks: [],
   currentBook: null,
   currentChapterIndex: 0,
   playMode: "chapter",
@@ -74,8 +72,7 @@ async function refreshCatalog() {
 
   try {
     const { books } = await loadCatalog();
-    state.allBooks = books;
-    state.catalog = applyDeletedBooks(books);
+    state.catalog = books;
     renderLibrary();
     updateResumeUi();
   } finally {
@@ -86,7 +83,7 @@ async function refreshCatalog() {
 function normalizeCatalog(books, assetBase) {
   return books.map((book) => ({
     ...book,
-    author: book.author || book.narrator || "Audiobook",
+    author: book.author || book.narrator || "",
     cover: resolveAsset(book.cover, assetBase) || placeholderCover(book),
     description: book.description || book.subtitle || "",
     chapters: [...(book.chapters || [])]
@@ -114,14 +111,10 @@ function renderLibrary() {
       </button>
       <div>
         <h3>${escapeHtml(book.title)}</h3>
-        <p>${escapeHtml(book.subtitle || book.description || "Ready to listen")}</p>
-        <span class="card-meta">
-          <span>${escapeHtml(book.author || "Unknown author")}</span>
-          <span>${book.chapters.length} chapters</span>
-        </span>
+        ${book.subtitle || book.description ? `<p>${escapeHtml(book.subtitle || book.description)}</p>` : ""}
+        <span class="card-meta">${book.chapters.length} chapter${book.chapters.length === 1 ? "" : "s"}</span>
         <div class="card-actions">
-          <button class="primary-button small-button" type="button" data-action="open-book">Open</button>
-          <button class="ghost-button small-button danger-button" type="button" data-action="delete-book">Delete</button>
+          <button class="primary-button small-button" type="button" data-action="open-book">Listen</button>
         </div>
       </div>
     </article>
@@ -131,14 +124,6 @@ function renderLibrary() {
     button.addEventListener("click", () => {
       const card = button.closest("[data-book-id]");
       location.hash = `book/${card.dataset.bookId}`;
-    });
-  });
-
-  els.bookGrid.querySelectorAll("[data-action='delete-book']").forEach((button) => {
-    button.addEventListener("click", () => {
-      const card = button.closest("[data-book-id]");
-      const book = findBook(card.dataset.bookId);
-      if (book) deleteBook(book);
     });
   });
 }
@@ -276,42 +261,6 @@ function getResume() {
 
 function findBook(bookId) {
   return state.catalog.find((book) => book.id === bookId);
-}
-
-function deleteBook(book) {
-  const confirmed = window.confirm(`Delete "${book.title}" from this library on this device?`);
-  if (!confirmed) return;
-
-  const deletedBookIds = getDeletedBookIds();
-  deletedBookIds.add(book.id);
-  localStorage.setItem(deletedBooksKey, JSON.stringify([...deletedBookIds]));
-
-  const resume = getResume();
-  if (resume?.bookId === book.id) localStorage.removeItem(storageKey);
-  if (state.currentBook?.id === book.id) {
-    els.audio.pause();
-    els.audio.removeAttribute("src");
-    els.audio.load();
-    els.playerBar.hidden = true;
-    state.currentBook = null;
-  }
-
-  state.catalog = applyDeletedBooks(state.allBooks);
-  renderLibrary();
-  updateResumeUi();
-}
-
-function applyDeletedBooks(books) {
-  const deletedBookIds = getDeletedBookIds();
-  return books.filter((book) => !deletedBookIds.has(book.id));
-}
-
-function getDeletedBookIds() {
-  try {
-    return new Set(JSON.parse(localStorage.getItem(deletedBooksKey) || "[]"));
-  } catch {
-    return new Set();
-  }
 }
 
 function withCacheBust(url) {
