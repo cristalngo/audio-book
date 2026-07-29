@@ -100,8 +100,8 @@
         },
         {
           "id": "ch-006-ms6lnnyc",
-          "title": "Chapter 6 - CUỘC SỐNG",
-          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/006-chapter-6-cu-c-s-ng.mp3",
+          "title": "Chương 6 - Cuộc sống",
+          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/006-ch-ng-6-cu-c-s-ng.mp3",
           "duration": 183.493667,
           "words": 566,
           "order": 6
@@ -113,7 +113,7 @@
       "narrator": "Thảo Nguyên",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T16:34:58",
+      "updatedAt": "2026-07-29T16:48:25",
       "language": "vi",
       "publishedAt": "2026-07-29"
     },
