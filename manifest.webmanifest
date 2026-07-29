@@ -1,6 +1,6 @@
 {
-  "name": "Audiobook Sanctuary",
-  "short_name": "Audiobook",
+  "name": "Stillword",
+  "short_name": "Stillword",
   "description": "A calm audiobook listening library.",
   "start_url": "./",
   "scope": "./",

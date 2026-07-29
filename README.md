@@ -1,4 +1,4 @@
-# Audiobook Sanctuary
+# Stillword
 
 A standalone static audiobook listener for GitHub Pages. It uses only `index.html`, `styles.css`, `app.js`, and a static JSON catalog.
 
