@@ -273,7 +273,7 @@ function renderBook(book) {
 
   els.bookDetail.querySelectorAll("[data-chapter-index]").forEach((button) => {
     button.addEventListener("click", () => {
-      loadChapter(book, Number(button.dataset.chapterIndex), { playMode: "chapter", autoplay: true, startTime: 0 });
+      loadChapter(book, Number(button.dataset.chapterIndex), { playMode: "book", autoplay: true, startTime: 0 });
     });
   });
 }
