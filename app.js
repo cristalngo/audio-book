@@ -475,6 +475,10 @@ function continueListening(autoplay = false) {
 }
 
 function siteBaseUrl() {
+  if (/^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname) || window.location.protocol === "file:") {
+    return new URL("https://cristalngo.github.io/audio-book/");
+  }
+
   const pathname = window.location.pathname.includes("/books/")
     ? `${window.location.pathname.split("/books/")[0]}/`
     : window.location.pathname;
