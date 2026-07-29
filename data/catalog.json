@@ -71,6 +71,14 @@
           "duration": 220.500625,
           "words": 705,
           "order": 2
+        },
+        {
+          "id": "ch-003-ms6chpc5",
+          "title": "Chương 3 – Cuộc Nổi Dậy Tâm Lý",
+          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/003-ch-ng-3-cu-c-n-i-d-y-t-m-l.mp3",
+          "duration": 251.248625,
+          "words": 819,
+          "order": 3
         }
       ],
       "title": "Tâm lý học cho sự thay đổi triệt để",
@@ -79,7 +87,7 @@
       "narrator": "Thảo Nguyên",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T12:11:43"
+      "updatedAt": "2026-07-29T12:21:16"
     }
   ]
 }
