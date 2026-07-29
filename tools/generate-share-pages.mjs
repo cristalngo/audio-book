@@ -5,7 +5,7 @@ const siteRoot = path.resolve(import.meta.dirname, "..");
 const catalogPath = path.join(siteRoot, "data", "catalog.json");
 const booksRoot = path.join(siteRoot, "books");
 const siteUrl = "https://cristalngo.github.io/audio-book/";
-const appVersion = "share-pages-21";
+const appVersion = "share-pages-20";
 
 const knownCoverPaths = {
   "dayspring-of-youth": "assets/covers/dayspring-of-youth.jpg?v=1",
@@ -29,10 +29,6 @@ function normalizeAsset(assetPath, bookId) {
   return value.replace(/^\.\//, "");
 }
 
-function cleanAssetUrl(assetPath) {
-  return assetPath.split("?")[0];
-}
-
 function absoluteSiteUrl(relativePath) {
   return new URL(relativePath, siteUrl).href;
 }
@@ -48,8 +44,7 @@ function bookDescription(book) {
 function htmlForBook(book) {
   const title = `${book.title} | Stillword`;
   const description = bookDescription(book);
-  const coverPath = normalizeAsset(book.cover, book.id);
-  const cover = absoluteSiteUrl(cleanAssetUrl(coverPath));
+  const cover = absoluteSiteUrl(normalizeAsset(book.cover, book.id));
   const pageUrl = absoluteSiteUrl(`books/${book.id}/`);
   const appUrl = absoluteSiteUrl(`#book/${book.id}`);
 
@@ -67,18 +62,20 @@ function htmlForBook(book) {
     <meta property="og:description" content="${escapeHtml(description)}">
     <meta property="og:url" content="${escapeHtml(pageUrl)}">
     <meta property="og:image" content="${escapeHtml(cover)}">
-    <meta property="og:image:secure_url" content="${escapeHtml(cover)}">
-    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:alt" content="${escapeHtml(`${book.title} cover`)}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${escapeHtml(book.title)}">
     <meta name="twitter:description" content="${escapeHtml(description)}">
     <meta name="twitter:image" content="${escapeHtml(cover)}">
+    <meta http-equiv="refresh" content="0; url=${escapeHtml(appUrl)}">
     <link rel="stylesheet" href="../../styles.css?v=${appVersion}">
+    <script>
+      window.location.replace(${JSON.stringify(appUrl)});
+    </script>
   </head>
   <body>
     <main class="share-landing">
-      <img src="../../${escapeHtml(coverPath)}" alt="">
+      <img src="../../${escapeHtml(normalizeAsset(book.cover, book.id))}" alt="">
       <h1>${escapeHtml(book.title)}</h1>
       ${book.author ? `<p>${escapeHtml(book.author)}</p>` : ""}
       <a class="primary-button" href="${escapeHtml(appUrl)}">Listen on Stillword</a>
