@@ -132,6 +132,8 @@ function copy(book, key) {
       listen: "Listen",
       open: "Open",
       published: "Published",
+      share: "Share",
+      copied: "Link copied",
       language: "English"
     },
     vi: {
@@ -140,6 +142,8 @@ function copy(book, key) {
       listen: "Nghe",
       open: "Mở",
       published: "Xuất bản",
+      share: "Chia sẻ",
+      copied: "Đã sao chép",
       language: "Tiếng Việt"
     }
   };
@@ -352,6 +356,9 @@ function renderBook(book) {
           <span>${escapeHtml(languageLabel(book))}</span>
           ${book.publishedAt ? `<span>${escapeHtml(publishedLabel(book))}</span>` : ""}
         </div>
+        <div class="detail-actions">
+          <button class="ghost-button compact-action" type="button" data-action="share-book">${escapeHtml(copy(book, "share"))}</button>
+        </div>
         ${shouldShowDescription ? `<p class="book-description">${escapeHtml(book.description)}</p>` : ""}
       </div>
     </div>
@@ -372,6 +379,10 @@ function renderBook(book) {
     button.addEventListener("click", () => {
       loadChapter(book, Number(button.dataset.chapterIndex), { playMode: "book", autoplay: true, startTime: 0 });
     });
+  });
+
+  els.bookDetail.querySelector("[data-action='share-book']")?.addEventListener("click", (event) => {
+    shareBook(book, event.currentTarget);
   });
 }
 
@@ -461,6 +472,42 @@ function continueListening(autoplay = false) {
     autoplay,
     startTime: resume.time || 0
   });
+}
+
+function siteBaseUrl() {
+  const pathname = window.location.pathname.includes("/books/")
+    ? `${window.location.pathname.split("/books/")[0]}/`
+    : window.location.pathname;
+  return new URL(pathname, window.location.origin);
+}
+
+function bookShareUrl(book) {
+  return new URL(`books/${book.id}/`, siteBaseUrl()).href;
+}
+
+async function shareBook(book, button) {
+  const url = bookShareUrl(book);
+  const text = book.description || book.subtitle || book.author || "Listen on Stillword";
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: book.title, text, url });
+      return;
+    } catch (error) {
+      if (error.name === "AbortError") return;
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(url);
+    const originalText = button.textContent;
+    button.textContent = copy(book, "copied");
+    window.setTimeout(() => {
+      button.textContent = originalText;
+    }, 1600);
+  } catch {
+    window.location.href = url;
+  }
 }
 
 function ensurePlayableSelection() {
