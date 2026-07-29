@@ -63,6 +63,14 @@
           "duration": 459.428542,
           "words": 1496,
           "order": 1
+        },
+        {
+          "id": "ch-002-ms6ca3fl",
+          "title": "Chương 2 – Chiếc Thang Kỳ Diệu",
+          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/002-ch-ng-2-chi-c-thang-k-di-u.mp3",
+          "duration": 220.500625,
+          "words": 705,
+          "order": 2
         }
       ],
       "title": "Tâm lý học cho sự thay đổi triệt để",
@@ -71,7 +79,7 @@
       "narrator": "Thảo Nguyên",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T12:06:49"
+      "updatedAt": "2026-07-29T12:11:43"
     }
   ]
 }
