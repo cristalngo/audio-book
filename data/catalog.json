@@ -24,7 +24,7 @@
           "id": "ch-003-ms5lcf5x",
           "title": "Chapter 2: The Nous Atom",
           "src": "audio/dayspring-of-youth/003-chapter-2-the-nous-atom.mp3",
-          "duration": 913.4445,
+          "duration": 1126.828125,
           "words": 1957,
           "order": 3
         },
@@ -40,9 +40,17 @@
           "id": "ch-005-ms5m6fer",
           "title": "Chapter 4: The Astral",
           "src": "audio/dayspring-of-youth/005-chapter-4-the-astral.mp3",
-          "duration": 1392.608208,
+          "duration": 1675.507958,
           "words": 2969,
           "order": 5
+        },
+        {
+          "id": "ch-006-ms5m7qdi",
+          "title": "Chapter 5: Elemental Nature",
+          "src": "audio/dayspring-of-youth/006-chapter-5-elemental-nature.mp3",
+          "duration": 3225.330792,
+          "words": 5832,
+          "order": 6
         }
       ],
       "title": "Dayspring of Youth",
@@ -50,7 +58,7 @@
       "narrator": "Brian M",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T15:16:08",
+      "updatedAt": "2026-07-29T17:49:27",
       "subtitle": "",
       "language": "en",
       "publishedAt": "2026-07-29"
