@@ -129,9 +129,9 @@ function renderLibrary() {
         <span class="card-meta">${book.chapters.length} chapter${book.chapters.length === 1 ? "" : "s"}</span>
         <div class="card-actions">
           <button class="primary-button small-button" type="button" data-action="open-book">Listen</button>
-          <button class="text-button small-text-button" type="button" data-action="hide-book">Hide</button>
         </div>
       </div>
+      <button class="hide-book-button" type="button" data-action="hide-book" aria-label="Hide ${escapeHtml(book.title)}">×</button>
     </article>
   `).join("") : `<p class="empty-state">No books in your library right now.</p>`;
   els.hiddenBooksPanel.hidden = !state.showHiddenBooks || hiddenBooks.length === 0;
@@ -392,22 +392,7 @@ function placeholderCover(book) {
   const palette = palettes[seed % palettes.length];
   const titleLines = splitCoverTitle(book.title || "Audiobook");
   const author = escapeHtml(book.author || book.narrator || "M");
-  const sunX = 300 + (seed % 4) * 90;
-  const sunY = 370 + ((seed >> 3) % 5) * 34;
-  const sunRadius = 112 + ((seed >> 5) % 4) * 18;
-  const waveA = 640 + ((seed >> 7) % 120);
-  const waveB = 690 + ((seed >> 9) % 115);
-  const waveC = 720 + ((seed >> 11) % 105);
-  const pattern = seed % 3;
-  const motif = [
-    `<path d="M146 230 C210 176 276 176 340 230" fill="none" stroke="${palette[4]}" stroke-width="8" opacity="0.42"/>
-     <path d="M560 230 C626 176 694 176 760 230" fill="none" stroke="${palette[2]}" stroke-width="8" opacity="0.26"/>`,
-    `<circle cx="156" cy="226" r="18" fill="${palette[4]}" opacity="0.42"/>
-     <circle cx="730" cy="284" r="28" fill="${palette[3]}" opacity="0.52"/>
-     <circle cx="774" cy="228" r="10" fill="${palette[2]}" opacity="0.28"/>`,
-    `<path d="M120 262 L172 214 L224 262" fill="none" stroke="${palette[4]}" stroke-width="7" opacity="0.42"/>
-     <path d="M682 248 L734 202 L786 248" fill="none" stroke="${palette[2]}" stroke-width="7" opacity="0.26"/>`
-  ][pattern];
+  const scene = coverScene(seed, palette);
   const titleMarkup = titleLines.map((line, index) => (
     `<tspan x="450" ${index === 0 ? 'y="168"' : 'dy="74"'}>${escapeHtml(line)}</tspan>`
   )).join("");
@@ -422,16 +407,49 @@ function placeholderCover(book) {
       </defs>
       <rect width="900" height="1200" fill="url(#g)"/>
       <rect x="44" y="44" width="812" height="1112" rx="36" fill="none" stroke="${palette[3]}" stroke-width="3" opacity="0.34"/>
-      ${motif}
-      <circle cx="${sunX}" cy="${sunY}" r="${sunRadius}" fill="${palette[3]}" opacity="0.66"/>
-      <path d="M0 ${waveA} C150 ${waveA - 72} 290 ${waveB + 38} 460 ${waveB - 28} C636 ${waveB - 96} 736 ${waveC + 48} 900 ${waveC - 32} L900 1200 L0 1200 Z" fill="${palette[2]}" opacity="0.9"/>
-      <path d="M0 ${waveA + 86} C194 ${waveA + 12} 304 ${waveB + 116} 500 ${waveB + 48} C652 ${waveB - 8} 778 ${waveC + 112} 900 ${waveC + 46}" fill="none" stroke="${palette[3]}" stroke-width="5" opacity="0.28"/>
+      ${scene}
       <text text-anchor="middle" font-family="Georgia, serif" font-size="${titleLines.length > 1 ? 58 : 66}" font-weight="600" fill="#24312c">
         ${titleMarkup}
       </text>
       <text x="450" y="${titleLines.length > 1 ? 318 : 254}" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="${palette[2]}">${author}</text>
     </svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function coverScene(seed, palette) {
+  const variant = seed % 6;
+  const accent = palette[4];
+  const light = palette[3];
+  const dark = palette[2];
+
+  const scenes = [
+    `<circle cx="612" cy="430" r="126" fill="${light}" opacity="0.72"/>
+     <path d="M0 760 C145 684 265 790 408 716 C544 646 662 746 900 660 L900 1200 L0 1200 Z" fill="${dark}" opacity="0.9"/>
+     <path d="M100 714 L282 516 L422 690 L540 570 L762 714 Z" fill="${dark}" opacity="0.34"/>
+     <path d="M104 714 L282 516 L422 690 L540 570 L762 714" fill="none" stroke="${light}" stroke-width="6" opacity="0.36"/>`,
+    `<path d="M258 780 L258 484 C258 322 642 322 642 484 L642 780 Z" fill="${dark}" opacity="0.18"/>
+     <path d="M326 780 L326 506 C326 404 574 404 574 506 L574 780 Z" fill="${light}" opacity="0.68"/>
+     <path d="M228 782 H672" stroke="${dark}" stroke-width="26" opacity="0.62"/>
+     <path d="M324 842 H576 M286 908 H614 M246 974 H654" stroke="${accent}" stroke-width="10" opacity="0.45"/>`,
+    `<circle cx="306" cy="430" r="102" fill="${light}" opacity="0.64"/>
+     <circle cx="350" cy="394" r="104" fill="${palette[1]}" opacity="0.92"/>
+     <path d="M0 760 C150 704 230 806 376 744 C556 668 644 806 900 704 L900 1200 L0 1200 Z" fill="${dark}" opacity="0.9"/>
+     <path d="M150 570 C218 520 282 520 350 570 M578 538 C650 482 718 482 790 538" fill="none" stroke="${accent}" stroke-width="9" opacity="0.44"/>`,
+    `<path d="M450 352 L566 640 L856 650 L622 824 L706 1102 L450 938 L194 1102 L278 824 L44 650 L334 640 Z" fill="${light}" opacity="0.38"/>
+     <circle cx="450" cy="654" r="168" fill="none" stroke="${dark}" stroke-width="20" opacity="0.38"/>
+     <circle cx="450" cy="654" r="92" fill="${light}" opacity="0.54"/>
+     <path d="M450 452 V856 M248 654 H652" stroke="${accent}" stroke-width="8" opacity="0.38"/>`,
+    `<path d="M450 872 C286 724 250 588 350 474 C410 406 490 406 550 474 C650 588 614 724 450 872 Z" fill="${light}" opacity="0.56"/>
+     <path d="M450 872 C364 718 376 584 450 450 C524 584 536 718 450 872 Z" fill="${dark}" opacity="0.24"/>
+     <path d="M248 806 C326 720 382 690 450 872 C518 690 574 720 652 806" fill="none" stroke="${accent}" stroke-width="11" opacity="0.5"/>
+     <path d="M0 966 C164 914 284 1010 450 944 C628 872 746 978 900 922 L900 1200 L0 1200 Z" fill="${dark}" opacity="0.9"/>`,
+    `<path d="M452 342 C596 482 652 640 622 814 C596 966 492 1060 450 1084 C408 1060 304 966 278 814 C248 640 306 482 452 342 Z" fill="${dark}" opacity="0.22"/>
+     <path d="M450 330 V1058" stroke="${light}" stroke-width="8" opacity="0.5"/>
+     <path d="M450 470 C350 506 296 588 282 704 M450 602 C550 638 604 720 618 836 M450 738 C364 766 314 834 298 930" fill="none" stroke="${accent}" stroke-width="10" opacity="0.42"/>
+     <circle cx="450" cy="320" r="72" fill="${light}" opacity="0.7"/>`
+  ];
+
+  return scenes[variant];
 }
 
 function hashString(value) {

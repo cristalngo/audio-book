@@ -196,6 +196,7 @@ h2 {
 }
 
 .book-card {
+  position: relative;
   display: grid;
   grid-template-rows: auto 1fr;
   gap: 13px;
@@ -230,7 +231,8 @@ h2 {
 }
 
 .book-open:focus-visible,
-.small-button:focus-visible {
+.small-button:focus-visible,
+.hide-book-button:focus-visible {
   outline: 3px solid rgba(111, 131, 116, 0.35);
   outline-offset: 3px;
 }
@@ -285,6 +287,36 @@ h2 {
   padding: 0;
   color: var(--sage-dark);
   font-size: 0.86rem;
+}
+
+.hide-book-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(222, 216, 204, 0.74);
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.82);
+  color: var(--sage-dark);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 140ms ease, background 140ms ease, border-color 140ms ease;
+}
+
+.book-card:hover .hide-book-button,
+.book-card:focus-within .hide-book-button {
+  opacity: 1;
+}
+
+.hide-book-button:hover {
+  border-color: rgba(184, 115, 104, 0.46);
+  background: rgba(255, 253, 248, 0.96);
 }
 
 .hidden-books {
@@ -589,6 +621,14 @@ body.mini-player .round-button {
     border-color: rgba(222, 216, 204, 0.78);
     padding: 8px;
     box-shadow: 0 8px 20px rgba(68, 56, 42, 0.07);
+  }
+
+  .hide-book-button {
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    opacity: 1;
   }
 
   .book-card:hover,
