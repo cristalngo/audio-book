@@ -2,7 +2,8 @@ const catalogSources = [
   { url: "../listener-export/data/catalog.json", assetBase: "../listener-export/" },
   { url: "./data/catalog.json", assetBase: "./" }
 ];
-const storageKey = "audiobookSanctuary.resume.v1";
+const legacyResumeStorageKey = "audiobookSanctuary.resume.v1";
+const resumeStorageKey = "stillword.resumeByBook.v2";
 const hiddenBooksStorageKey = "stillword.hiddenBooks.v1";
 const listenStatsStorageKey = "stillword.listenStats.v1";
 const excludedBookIds = new Set(["binh-minh-tuoi-tre"]);
@@ -554,7 +555,7 @@ function loadChapter(book, chapterIndex, options = {}) {
 }
 
 function continueListening(autoplay = false) {
-  const resume = getResume();
+  const resume = state.routeBook ? getResume(state.routeBook.id) : getResume();
   if (!resume) return;
   const book = findBook(resume.bookId);
   if (!book) return;
@@ -609,7 +610,7 @@ async function shareBook(book, button) {
 function ensurePlayableSelection() {
   if (els.audio.src) return true;
 
-  const resume = getResume();
+  const resume = state.routeBook ? getResume(state.routeBook.id) : getResume();
   const resumeBook = resume ? findBook(resume.bookId) : null;
   const book = state.routeBook || resumeBook || state.catalog[0];
   if (!book) return false;
@@ -625,7 +626,7 @@ function ensurePlayableSelection() {
 }
 
 function updateResumeUi() {
-  const resume = getResume();
+  const resume = state.routeBook ? getResume(state.routeBook.id) : getResume();
   const book = resume ? findBook(resume.bookId) : null;
   const chapter = book?.chapters?.[resume.chapterIndex || 0];
   const hasResume = Boolean(book && chapter);
@@ -640,18 +641,48 @@ function updateResumeUi() {
 
 function saveResume(time = els.audio.currentTime || 0) {
   if (!state.currentBook) return;
-  localStorage.setItem(storageKey, JSON.stringify({
+  const store = getResumeStore();
+  const resume = {
     bookId: state.currentBook.id,
     chapterIndex: state.currentChapterIndex,
     time,
     updatedAt: new Date().toISOString()
-  }));
+  };
+  store.books[state.currentBook.id] = resume;
+  store.latestBookId = state.currentBook.id;
+  localStorage.setItem(resumeStorageKey, JSON.stringify(store));
   updateResumeUi();
 }
 
-function getResume() {
+function getResume(bookId) {
+  const store = getResumeStore();
+  if (bookId) return store.books[bookId] || null;
+  return store.latestBookId ? store.books[store.latestBookId] || null : null;
+}
+
+function getResumeStore() {
   try {
-    return JSON.parse(localStorage.getItem(storageKey) || "null");
+    const stored = JSON.parse(localStorage.getItem(resumeStorageKey) || "null");
+    if (stored?.books) return {
+      latestBookId: stored.latestBookId || "",
+      books: stored.books || {}
+    };
+  } catch {
+    // Fall through to legacy migration.
+  }
+
+  const legacyResume = getLegacyResume();
+  if (!legacyResume?.bookId) return { latestBookId: "", books: {} };
+
+  return {
+    latestBookId: legacyResume.bookId,
+    books: { [legacyResume.bookId]: legacyResume }
+  };
+}
+
+function getLegacyResume() {
+  try {
+    return JSON.parse(localStorage.getItem(legacyResumeStorageKey) || "null");
   } catch {
     return null;
   }
