@@ -112,3 +112,9 @@ Run this after updating `data/catalog.json` to regenerate those pages:
 ```sh
 node tools/generate-share-pages.mjs
 ```
+
+## Listening Counts
+
+The static listener tracks book and chapter listens in the visitor's browser with `localStorage`. A listen is counted after a chapter has actually played for a few seconds, so accidental taps do not immediately increase the number.
+
+Because GitHub Pages is static, these counts are per device only. To see total listens across all visitors, connect the player to an external analytics service or database endpoint.

@@ -4,6 +4,7 @@ const catalogSources = [
 ];
 const storageKey = "audiobookSanctuary.resume.v1";
 const hiddenBooksStorageKey = "stillword.hiddenBooks.v1";
+const listenStatsStorageKey = "stillword.listenStats.v1";
 const excludedBookIds = new Set(["binh-minh-tuoi-tre"]);
 const knownCoverPaths = {
   "dayspring-of-youth": "./assets/covers/dayspring-of-youth.jpg?v=1",
@@ -20,6 +21,7 @@ const state = {
   routeBook: null,
   playMode: "chapter",
   restoreTime: 0,
+  trackedListenKey: "",
   isRefreshing: false
 };
 
@@ -96,7 +98,8 @@ async function refreshCatalog() {
 function normalizeCatalog(books, assetBase) {
   return books.filter((book) => !excludedBookIds.has(book.id)).map((book) => ({
     ...book,
-    author: book.author || book.narrator || "",
+    author: book.author || "",
+    narrator: book.narrator || "",
     cover: resolveAsset(book.cover, assetBase) || knownCover(book.id) || placeholderCover(book),
     description: book.description || book.subtitle || "",
     language: normalizeLanguage(book.language, book.title),
@@ -132,6 +135,10 @@ function copy(book, key) {
       listen: "Listen",
       open: "Open",
       published: "Published",
+      author: "Author",
+      narrator: "Read by",
+      listenCount: "listen on this device",
+      listenCountPlural: "listens on this device",
       share: "Share",
       copied: "Link copied",
       language: "English"
@@ -142,6 +149,10 @@ function copy(book, key) {
       listen: "Nghe",
       open: "Mở",
       published: "Xuất bản",
+      author: "Tác giả",
+      narrator: "Đọc bởi",
+      listenCount: "lượt nghe trên máy này",
+      listenCountPlural: "lượt nghe trên máy này",
       share: "Chia sẻ",
       copied: "Đã sao chép",
       language: "Tiếng Việt"
@@ -170,6 +181,81 @@ function publishedLabel(book) {
       day: "numeric"
     });
   return `${copy(book, "published")} ${value}`;
+}
+
+function authorLabel(book) {
+  return book.author ? `${copy(book, "author")} ${book.author}` : "";
+}
+
+function narratorLabel(book) {
+  return book.narrator ? `${copy(book, "narrator")} ${book.narrator}` : "";
+}
+
+function listenCountLabel(book, count) {
+  const key = count === 1 ? "listenCount" : "listenCountPlural";
+  return `${count} ${copy(book, key)}`;
+}
+
+function emptyListenStats() {
+  return { books: {}, chapters: {} };
+}
+
+function getListenStats() {
+  try {
+    const stats = JSON.parse(localStorage.getItem(listenStatsStorageKey) || "null");
+    return stats && typeof stats === "object" ? {
+      books: stats.books || {},
+      chapters: stats.chapters || {}
+    } : emptyListenStats();
+  } catch {
+    return emptyListenStats();
+  }
+}
+
+function saveListenStats(stats) {
+  localStorage.setItem(listenStatsStorageKey, JSON.stringify(stats));
+}
+
+function chapterStatsKey(bookId, chapterIndex) {
+  return `${bookId}::${chapterIndex}`;
+}
+
+function bookListenCount(book) {
+  return getListenStats().books[book.id]?.plays || 0;
+}
+
+function chapterListenCount(book, chapterIndex) {
+  return getListenStats().chapters[chapterStatsKey(book.id, chapterIndex)]?.plays || 0;
+}
+
+function trackCurrentListen() {
+  if (!state.currentBook || !els.audio.src) return;
+
+  const duration = els.audio.duration || 0;
+  const threshold = duration ? Math.min(10, Math.max(3, duration * 0.08)) : 3;
+  if (els.audio.currentTime < threshold) return;
+
+  const listenKey = chapterStatsKey(state.currentBook.id, state.currentChapterIndex);
+  if (state.trackedListenKey === listenKey) return;
+
+  const stats = getListenStats();
+  const now = new Date().toISOString();
+  stats.books[state.currentBook.id] = {
+    plays: (stats.books[state.currentBook.id]?.plays || 0) + 1,
+    lastListenedAt: now
+  };
+  stats.chapters[listenKey] = {
+    plays: (stats.chapters[listenKey]?.plays || 0) + 1,
+    lastListenedAt: now
+  };
+  saveListenStats(stats);
+  state.trackedListenKey = listenKey;
+  refreshListenStatsUi();
+}
+
+function refreshListenStatsUi() {
+  if (!els.libraryView.hidden) renderLibrary();
+  if (state.routeBook) renderBook(state.routeBook);
 }
 
 function resolveAsset(path, assetBase) {
@@ -292,9 +378,11 @@ function renderLibrary() {
         <h3>${escapeHtml(book.title)}</h3>
         ${book.subtitle || book.description ? `<p>${escapeHtml(book.subtitle || book.description)}</p>` : ""}
         <div class="book-meta-list">
+          ${book.narrator ? `<span>${escapeHtml(narratorLabel(book))}</span>` : ""}
           <span>${escapeHtml(chapterCountLabel(book))}</span>
           <span>${escapeHtml(languageLabel(book))}</span>
           ${book.publishedAt ? `<span>${escapeHtml(publishedLabel(book))}</span>` : ""}
+          ${bookListenCount(book) ? `<span>${escapeHtml(listenCountLabel(book, bookListenCount(book)))}</span>` : ""}
         </div>
         <div class="card-actions">
           <button class="primary-button small-button" type="button" data-action="open-book">${escapeHtml(copy(book, "listen"))}</button>
@@ -352,9 +440,12 @@ function renderBook(book) {
         <h1>${escapeHtml(book.title)}</h1>
         ${book.subtitle ? `<h2>${escapeHtml(book.subtitle)}</h2>` : ""}
         <div class="book-meta-list detail-meta">
+          ${book.author ? `<span>${escapeHtml(authorLabel(book))}</span>` : ""}
+          ${book.narrator ? `<span>${escapeHtml(narratorLabel(book))}</span>` : ""}
           <span>${escapeHtml(chapterCountLabel(book))}</span>
           <span>${escapeHtml(languageLabel(book))}</span>
           ${book.publishedAt ? `<span>${escapeHtml(publishedLabel(book))}</span>` : ""}
+          ${bookListenCount(book) ? `<span>${escapeHtml(listenCountLabel(book, bookListenCount(book)))}</span>` : ""}
         </div>
         <div class="detail-actions">
           <button class="ghost-button compact-action" type="button" data-action="share-book">${escapeHtml(copy(book, "share"))}</button>
@@ -368,7 +459,7 @@ function renderBook(book) {
           <span class="chapter-number">${index + 1}</span>
           <div>
             <h3>${escapeHtml(chapter.title)}</h3>
-            <span class="chapter-meta">${escapeHtml(chapter.duration || "Audio chapter")}</span>
+            <span class="chapter-meta">${escapeHtml(chapter.duration || "Audio chapter")}${chapterListenCount(book, index) ? ` · ${escapeHtml(listenCountLabel(book, chapterListenCount(book, index)))}` : ""}</span>
           </div>
         </button>
       `).join("")}
@@ -440,6 +531,7 @@ function loadChapter(book, chapterIndex, options = {}) {
   state.currentChapterIndex = chapterIndex;
   state.playMode = options.playMode || "chapter";
   state.restoreTime = options.startTime || 0;
+  state.trackedListenKey = "";
   els.audio.volume = 1;
 
   els.playerBar.hidden = false;
@@ -759,6 +851,7 @@ els.audio.addEventListener("timeupdate", () => {
   els.durationTime.textContent = formatTime(duration);
   els.seekBar.value = duration ? Math.round((els.audio.currentTime / duration) * 1000) : 0;
   saveResume();
+  trackCurrentListen();
 });
 
 els.seekBar.addEventListener("input", () => {
