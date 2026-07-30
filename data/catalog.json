@@ -189,6 +189,22 @@
           "duration": 2769.532042,
           "words": 8279,
           "order": 3
+        },
+        {
+          "id": "ch-004",
+          "title": "Chương 3 --- Những Mặc khải Bất ngờ",
+          "src": "audio/xu-xo-cua-cac-vi-than/004-ch-ng-3-nh-ng-m-c-kh-i-b-t-ng.mp3",
+          "duration": 2624.493,
+          "words": 8081,
+          "order": 4
+        },
+        {
+          "id": "ch-005",
+          "title": "Chương 4 --- Sức mạnh của trí tưởng tượng",
+          "src": "audio/xu-xo-cua-cac-vi-than/005-ch-ng-4-s-c-m-nh-c-a-tr-t-ng-t-ng.mp3",
+          "duration": 1582.58225,
+          "words": 4724,
+          "order": 5
         }
       ],
       "title": "Xứ xở của các vị thần",
@@ -196,8 +212,8 @@
       "subtitle": "Cuộc diện kiến các Chân sư Minh triết ở Shambhala",
       "narrator": "Kim Phượng",
       "description": "",
-      "cover": "assets/covers/xu-xo-cua-cac-vi-than.jpg?v=2",
-      "updatedAt": "2026-07-30T00:35:39",
+      "cover": "",
+      "updatedAt": "2026-07-30T17:20:05",
       "language": "vi"
     }
   ]
