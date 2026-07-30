@@ -176,11 +176,19 @@
       "chapters": [
         {
           "id": "ch-002",
-          "title": "Chương 1 - Cảnh đẹp núi non",
+          "title": "Chương 1 --- Cảnh đẹp núi non",
           "src": "audio/xu-xo-cua-cac-vi-than/002-ch-ng-1-c-nh-p-n-i-non.mp3",
           "duration": 1880.867125,
           "words": 5574,
           "order": 2
+        },
+        {
+          "id": "ch-003",
+          "title": "Chương 2. --- Diện kiến Chúa tể Shambhala",
+          "src": "audio/xu-xo-cua-cac-vi-than/003-ch-ng-2-di-n-ki-n-ch-a-t-shambhala.mp3",
+          "duration": 2769.532042,
+          "words": 8279,
+          "order": 3
         }
       ],
       "title": "Xứ xở của các vị thần",
@@ -188,8 +196,8 @@
       "subtitle": "Cuộc diện kiến các Chân sư Minh triết ở Shambhala",
       "narrator": "Kim Phượng",
       "description": "",
-      "cover": "assets/covers/xu-xo-cua-cac-vi-than.jpg?v=1",
-      "updatedAt": "2026-07-29T23:10:10",
+      "cover": "",
+      "updatedAt": "2026-07-30T00:35:39",
       "language": "vi"
     }
   ]
