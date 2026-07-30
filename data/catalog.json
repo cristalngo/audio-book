@@ -129,6 +129,14 @@
           "duration": 283.22075,
           "words": 888,
           "order": 8
+        },
+        {
+          "id": "ch-009-ms6vhiw3",
+          "title": "Chương 9 – Sự kiện cá nhân",
+          "src": "audio/tam-ly-hoc-cho-su-thay-oi-triet-e/009-ch-ng-9-s-ki-n-c-nh-n.mp3",
+          "duration": 205.935583,
+          "words": 687,
+          "order": 9
         }
       ],
       "title": "Tâm lý học cho sự thay đổi triệt để",
@@ -137,7 +145,7 @@
       "narrator": "Thảo Nguyên",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T20:47:14",
+      "updatedAt": "2026-07-29T21:12:27",
       "language": "vi",
       "publishedAt": "2026-07-29"
     },
