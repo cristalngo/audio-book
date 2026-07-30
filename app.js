@@ -141,6 +141,7 @@ function copy(book, key) {
       narrator: "Read by",
       listenCount: "listen on this device",
       listenCountPlural: "listens on this device",
+      more: "More",
       share: "Share",
       copied: "Link copied",
       language: "English"
@@ -155,6 +156,7 @@ function copy(book, key) {
       narrator: "Đọc bởi",
       listenCount: "lượt nghe trên máy này",
       listenCountPlural: "lượt nghe trên máy này",
+      more: "More",
       share: "Chia sẻ",
       copied: "Đã sao chép",
       language: "Tiếng Việt"
@@ -196,6 +198,16 @@ function narratorLabel(book) {
 function listenCountLabel(book, count) {
   const key = count === 1 ? "listenCount" : "listenCountPlural";
   return `${count} ${copy(book, key)}`;
+}
+
+function compactBookMeta(book) {
+  const items = [];
+  if (book.narrator) items.push(narratorLabel(book));
+  items.push(chapterCountLabel(book));
+  items.push(languageLabel(book));
+  if (book.publishedAt) items.push(publishedLabel(book));
+  if (bookListenCount(book)) items.push(listenCountLabel(book, bookListenCount(book)));
+  return items;
 }
 
 function emptyListenStats() {
@@ -379,13 +391,13 @@ function renderLibrary() {
       <div>
         <h3>${escapeHtml(book.title)}</h3>
         ${book.subtitle || book.description ? `<p>${escapeHtml(book.subtitle || book.description)}</p>` : ""}
-        <div class="book-meta-list">
-          ${book.narrator ? `<span>${escapeHtml(narratorLabel(book))}</span>` : ""}
-          <span>${escapeHtml(chapterCountLabel(book))}</span>
-          <span>${escapeHtml(languageLabel(book))}</span>
-          ${book.publishedAt ? `<span>${escapeHtml(publishedLabel(book))}</span>` : ""}
-          ${bookListenCount(book) ? `<span>${escapeHtml(listenCountLabel(book, bookListenCount(book)))}</span>` : ""}
-        </div>
+        ${book.author ? `<p class="book-byline">${escapeHtml(authorLabel(book))}</p>` : ""}
+        <details class="book-more">
+          <summary>${escapeHtml(copy(book, "more"))}</summary>
+          <div class="book-meta-list">
+            ${compactBookMeta(book).map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+          </div>
+        </details>
         <div class="card-actions">
           <button class="primary-button small-button" type="button" data-action="open-book">${escapeHtml(copy(book, "listen"))}</button>
         </div>
@@ -441,17 +453,14 @@ function renderBook(book) {
         ${book.author ? `<p class="eyebrow">${escapeHtml(book.author)}</p>` : ""}
         <h1>${escapeHtml(book.title)}</h1>
         ${book.subtitle ? `<h2>${escapeHtml(book.subtitle)}</h2>` : ""}
-        <div class="book-meta-list detail-meta">
-          ${book.author ? `<span>${escapeHtml(authorLabel(book))}</span>` : ""}
-          ${book.narrator ? `<span>${escapeHtml(narratorLabel(book))}</span>` : ""}
-          <span>${escapeHtml(chapterCountLabel(book))}</span>
-          <span>${escapeHtml(languageLabel(book))}</span>
-          ${book.publishedAt ? `<span>${escapeHtml(publishedLabel(book))}</span>` : ""}
-          ${bookListenCount(book) ? `<span>${escapeHtml(listenCountLabel(book, bookListenCount(book)))}</span>` : ""}
-        </div>
-        <div class="detail-actions">
+        ${book.author ? `<p class="book-byline detail-byline">${escapeHtml(authorLabel(book))}</p>` : ""}
+        <details class="book-more detail-more">
+          <summary>${escapeHtml(copy(book, "more"))}</summary>
+          <div class="book-meta-list detail-meta">
+            ${compactBookMeta(book).map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+          </div>
           <button class="ghost-button compact-action" type="button" data-action="share-book">${escapeHtml(copy(book, "share"))}</button>
-        </div>
+        </details>
         ${shouldShowDescription ? `<p class="book-description">${escapeHtml(book.description)}</p>` : ""}
       </div>
     </div>

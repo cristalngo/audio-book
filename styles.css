@@ -261,6 +261,49 @@ h2 {
   line-height: 1.45;
 }
 
+.book-byline {
+  margin: 8px 0 0;
+  color: var(--sage-dark);
+  font-size: 0.88rem;
+  font-weight: 760;
+  line-height: 1.35;
+}
+
+.detail-byline {
+  margin-top: 12px;
+  font-size: 0.98rem;
+}
+
+.book-more {
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.book-more summary {
+  width: max-content;
+  cursor: pointer;
+  color: var(--sage-dark);
+  font-size: 0.86rem;
+  font-weight: 780;
+  list-style: none;
+}
+
+.book-more summary::-webkit-details-marker {
+  display: none;
+}
+
+.book-more summary::after {
+  content: " +";
+}
+
+.book-more[open] summary::after {
+  content: " -";
+}
+
+.book-more .book-meta-list {
+  margin-top: 8px;
+}
+
 .card-meta {
   display: block;
   color: var(--sage-dark);
@@ -290,6 +333,14 @@ h2 {
 
 .detail-meta {
   margin: 12px 0 0;
+}
+
+.detail-more {
+  margin-top: 12px;
+}
+
+.detail-more .compact-action {
+  margin-top: 10px;
 }
 
 .card-actions {
