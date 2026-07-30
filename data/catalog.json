@@ -170,6 +170,26 @@
       "updatedAt": "2026-07-29T18:10:47",
       "language": "vi",
       "publishedAt": "2026-07-29"
+    },
+    {
+      "id": "xu-xo-cua-cac-vi-than",
+      "chapters": [
+        {
+          "id": "ch-002",
+          "title": "Chương 1 - Cảnh đẹp núi non",
+          "src": "audio/xu-xo-cua-cac-vi-than/002-ch-ng-1-c-nh-p-n-i-non.mp3",
+          "duration": 1880.867125,
+          "words": 5574,
+          "order": 2
+        }
+      ],
+      "title": "Xứ xở của các vị thần",
+      "author": "H. P. Blavatsky",
+      "subtitle": "Cuộc diện kiến các Chân sư Minh triết ở Shambhala",
+      "narrator": "Kim Phượng",
+      "description": "",
+      "cover": "",
+      "updatedAt": "2026-07-29T23:10:10"
     }
   ]
 }
