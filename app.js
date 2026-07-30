@@ -11,7 +11,7 @@ const knownCoverPaths = {
   "dayspring-of-youth": "./assets/covers/dayspring-of-youth.jpg?v=1",
   "tam-ly-hoc-cho-su-thay-oi-triet-e": "./assets/covers/tam-ly-hoc-cho-su-thay-doi-triet-de.jpg?v=1",
   "bong-hong-cai-ao": "./assets/covers/bong-hong-cai-ao.jpg?v=3",
-  "xu-xo-cua-cac-vi-than": "./assets/covers/xu-xo-cua-cac-vi-than.jpg?v=1"
+  "xu-xo-cua-cac-vi-than": "./assets/covers/xu-xo-cua-cac-vi-than.jpg?v=2"
 };
 
 const state = {
@@ -202,6 +202,7 @@ function listenCountLabel(book, count) {
 
 function compactBookMeta(book) {
   const items = [];
+  if (book.subtitle || book.description) items.push(book.subtitle || book.description);
   if (book.narrator) items.push(narratorLabel(book));
   items.push(chapterCountLabel(book));
   items.push(languageLabel(book));
@@ -390,7 +391,6 @@ function renderLibrary() {
       </button>
       <div>
         <h3>${escapeHtml(book.title)}</h3>
-        ${book.subtitle || book.description ? `<p>${escapeHtml(book.subtitle || book.description)}</p>` : ""}
         ${book.author ? `<p class="book-byline">${escapeHtml(authorLabel(book))}</p>` : ""}
         <details class="book-more">
           <summary>${escapeHtml(copy(book, "more"))}</summary>
@@ -450,9 +450,7 @@ function renderBook(book) {
     <div class="book-heading">
       <img class="book-cover-small" src="${escapeHtml(book.cover)}" alt="">
       <div>
-        ${book.author ? `<p class="eyebrow">${escapeHtml(book.author)}</p>` : ""}
         <h1>${escapeHtml(book.title)}</h1>
-        ${book.subtitle ? `<h2>${escapeHtml(book.subtitle)}</h2>` : ""}
         ${book.author ? `<p class="book-byline detail-byline">${escapeHtml(authorLabel(book))}</p>` : ""}
         <details class="book-more detail-more">
           <summary>${escapeHtml(copy(book, "more"))}</summary>
@@ -461,7 +459,7 @@ function renderBook(book) {
           </div>
           <button class="ghost-button compact-action" type="button" data-action="share-book">${escapeHtml(copy(book, "share"))}</button>
         </details>
-        ${shouldShowDescription ? `<p class="book-description">${escapeHtml(book.description)}</p>` : ""}
+        ${shouldShowDescription ? `<p class="book-description" hidden>${escapeHtml(book.description)}</p>` : ""}
       </div>
     </div>
     <div class="chapter-list">

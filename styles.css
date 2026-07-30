@@ -257,7 +257,7 @@ h2 {
 }
 
 .book-card p {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   line-height: 1.45;
 }
 
@@ -302,6 +302,10 @@ h2 {
 
 .book-more .book-meta-list {
   margin-top: 8px;
+}
+
+.book-more .book-meta-list span:first-child {
+  max-width: 100%;
 }
 
 .card-meta {
@@ -479,7 +483,7 @@ h2 {
 
 .book-detail h1 {
   margin-bottom: 8px;
-  font-size: clamp(2.2rem, 4vw, 4rem);
+  font-size: clamp(2rem, 3.4vw, 3.4rem);
 }
 
 .book-detail h2 {
@@ -731,12 +735,12 @@ body.mini-player .round-button {
   }
 
   .book-card {
-    grid-template-columns: clamp(104px, 30vw, 124px) minmax(0, 1fr);
+    grid-template-columns: clamp(118px, 36vw, 148px) minmax(0, 1fr);
     grid-template-rows: auto;
-    align-items: center;
-    gap: 13px;
+    align-items: start;
+    gap: 14px;
     border-color: rgba(222, 216, 204, 0.78);
-    padding: 10px 12px 10px 10px;
+    padding: 10px 12px 12px 10px;
     box-shadow: 0 8px 20px rgba(68, 56, 42, 0.07);
   }
 
@@ -774,12 +778,25 @@ body.mini-player .round-button {
 
   .book-card h3 {
     display: -webkit-box;
-    margin: 0 0 8px;
+    margin: 1px 0 7px;
     overflow: hidden;
-    font-size: clamp(0.98rem, 3.7vw, 1.12rem);
-    line-height: 1.16;
+    font-size: clamp(1rem, 4.15vw, 1.32rem);
+    line-height: 1.14;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
+  }
+
+  .book-byline {
+    margin-top: 6px;
+    font-size: 0.78rem;
+  }
+
+  .book-more {
+    margin-top: 7px;
+  }
+
+  .book-more summary {
+    font-size: 0.78rem;
   }
 
   .book-meta-list {
@@ -792,6 +809,15 @@ body.mini-player .round-button {
     padding: 0 7px;
     font-size: 0.66rem;
     line-height: 1;
+  }
+
+  .book-more .book-meta-list span:first-child {
+    width: 100%;
+    justify-content: flex-start;
+    white-space: normal;
+    line-height: 1.25;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 
   .card-actions {
@@ -816,7 +842,9 @@ body.mini-player .round-button {
 
   .book-detail h1 {
     margin-bottom: 6px;
-    font-size: clamp(1.65rem, 7vw, 2.35rem);
+    font-size: clamp(1.35rem, 5.2vw, 1.72rem);
+    line-height: 1.1;
+    overflow-wrap: anywhere;
   }
 
   .book-detail h2 {
@@ -825,12 +853,13 @@ body.mini-player .round-button {
   }
 
   .book-heading {
-    grid-template-columns: 58px minmax(0, 1fr);
-    gap: 12px;
+    grid-template-columns: clamp(88px, 28vw, 112px) minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
   }
 
   .book-cover-small {
-    width: 58px;
+    width: 100%;
     border-radius: 7px;
   }
 

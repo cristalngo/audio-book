@@ -11,7 +11,7 @@ const knownCoverPaths = {
   "dayspring-of-youth": "assets/covers/dayspring-of-youth.jpg?v=1",
   "tam-ly-hoc-cho-su-thay-oi-triet-e": "assets/covers/tam-ly-hoc-cho-su-thay-doi-triet-de.jpg?v=1",
   "bong-hong-cai-ao": "assets/covers/bong-hong-cai-ao.jpg?v=3",
-  "xu-xo-cua-cac-vi-than": "assets/covers/xu-xo-cua-cac-vi-than.jpg?v=1"
+  "xu-xo-cua-cac-vi-than": "assets/covers/xu-xo-cua-cac-vi-than.jpg?v=2"
 };
 
 function escapeHtml(value) {
