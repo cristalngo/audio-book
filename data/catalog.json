@@ -51,6 +51,22 @@
           "duration": 3242.679583,
           "words": 5832,
           "order": 6
+        },
+        {
+          "id": "ch-007-ms8c2vj3",
+          "title": "Chapter 6: The Eternal Lover",
+          "src": "audio/dayspring-of-youth/007-chapter-6-the-eternal-lover.mp3",
+          "duration": 1280.866,
+          "words": 2545,
+          "order": 7
+        },
+        {
+          "id": "ch-008-ms8wb2ig",
+          "title": "Chapter 7: Nature",
+          "src": "audio/dayspring-of-youth/008-chapter-7-nature.mp3",
+          "duration": 840.963167,
+          "words": 1501,
+          "order": 8
         }
       ],
       "title": "Dayspring of Youth",
@@ -58,7 +74,7 @@
       "narrator": "Brian M",
       "description": "",
       "cover": "",
-      "updatedAt": "2026-07-29T21:11:53",
+      "updatedAt": "2026-07-31T07:19:37",
       "subtitle": "",
       "language": "en",
       "publishedAt": "2026-07-29"
