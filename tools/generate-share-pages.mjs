@@ -15,10 +15,10 @@ const knownCoverPaths = {
 };
 
 const knownSocialImagePaths = {
-  "dayspring-of-youth": "assets/social/dayspring-of-youth.jpg",
-  "tam-ly-hoc-cho-su-thay-oi-triet-e": "assets/social/tam-ly-hoc-cho-su-thay-oi-triet-e.jpg",
-  "bong-hong-cai-ao": "assets/social/bong-hong-cai-ao.jpg",
-  "xu-xo-cua-cac-vi-than": "assets/social/xu-xo-cua-cac-vi-than.jpg"
+  "dayspring-of-youth": "assets/social/dayspring-of-youth-v2.jpg",
+  "tam-ly-hoc-cho-su-thay-oi-triet-e": "assets/social/tam-ly-hoc-cho-su-thay-oi-triet-e-v2.jpg",
+  "bong-hong-cai-ao": "assets/social/bong-hong-cai-ao-v2.jpg",
+  "xu-xo-cua-cac-vi-than": "assets/social/xu-xo-cua-cac-vi-than-v2.jpg"
 };
 
 function escapeHtml(value) {
