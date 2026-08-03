@@ -23,6 +23,7 @@ const state = {
   routeBook: null,
   playMode: "chapter",
   restoreTime: 0,
+  pendingAutoplay: false,
   trackedListenKey: "",
   isRefreshing: false
 };
@@ -540,6 +541,7 @@ function loadChapter(book, chapterIndex, options = {}) {
   state.currentChapterIndex = chapterIndex;
   state.playMode = options.playMode || "chapter";
   state.restoreTime = options.startTime || 0;
+  state.pendingAutoplay = Boolean(options.autoplay);
   state.trackedListenKey = "";
   els.audio.volume = 1;
 
@@ -555,11 +557,21 @@ function loadChapter(book, chapterIndex, options = {}) {
   els.audio.load();
   saveResume(state.restoreTime);
 
-  if (options.autoplay) {
-    els.audio.play().catch(() => {
-      els.playerChapter.textContent = `${chapter.title} - tap Play to start`;
-    });
+  if (state.pendingAutoplay) {
+    startPendingAutoplay();
   }
+}
+
+function startPendingAutoplay() {
+  if (!state.pendingAutoplay || !state.currentBook) return;
+  const chapter = state.currentBook.chapters[state.currentChapterIndex];
+  els.audio.play().then(() => {
+    state.pendingAutoplay = false;
+  }).catch(() => {
+    if (els.audio.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+    state.pendingAutoplay = false;
+    els.playerChapter.textContent = `${chapter.title} - tap Play to start`;
+  });
 }
 
 function continueListening(autoplay = false) {
@@ -869,9 +881,13 @@ els.audio.addEventListener("loadedmetadata", () => {
     state.restoreTime = 0;
   }
   els.durationTime.textContent = formatTime(els.audio.duration);
+  startPendingAutoplay();
 });
 
+els.audio.addEventListener("canplay", startPendingAutoplay);
+
 els.audio.addEventListener("play", () => {
+  state.pendingAutoplay = false;
   els.playPauseBtn.textContent = "Pause";
   els.playPauseBtn.setAttribute("aria-label", "Pause");
   setMediaPlaybackState("playing");
