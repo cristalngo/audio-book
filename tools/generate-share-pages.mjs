@@ -14,6 +14,13 @@ const knownCoverPaths = {
   "xu-xo-cua-cac-vi-than": "assets/covers/xu-xo-cua-cac-vi-than.jpg?v=2"
 };
 
+const knownSocialImagePaths = {
+  "dayspring-of-youth": "assets/social/dayspring-of-youth.jpg",
+  "tam-ly-hoc-cho-su-thay-oi-triet-e": "assets/social/tam-ly-hoc-cho-su-thay-oi-triet-e.jpg",
+  "bong-hong-cai-ao": "assets/social/bong-hong-cai-ao.jpg",
+  "xu-xo-cua-cac-vi-than": "assets/social/xu-xo-cua-cac-vi-than.jpg"
+};
+
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({
     "&": "&amp;",
@@ -50,7 +57,8 @@ function htmlForBook(book) {
   const title = `${book.title} | Stillword`;
   const description = bookDescription(book);
   const coverPath = normalizeAsset(book.cover, book.id);
-  const cover = absoluteSiteUrl(cleanAssetUrl(coverPath));
+  const socialImagePath = knownSocialImagePaths[book.id] || cleanAssetUrl(coverPath);
+  const socialImage = absoluteSiteUrl(socialImagePath);
   const pageUrl = absoluteSiteUrl(`books/${book.id}/`);
   const appUrl = absoluteSiteUrl(`#book/${book.id}`);
 
@@ -67,14 +75,17 @@ function htmlForBook(book) {
     <meta property="og:title" content="${escapeHtml(book.title)}">
     <meta property="og:description" content="${escapeHtml(description)}">
     <meta property="og:url" content="${escapeHtml(pageUrl)}">
-    <meta property="og:image" content="${escapeHtml(cover)}">
-    <meta property="og:image:secure_url" content="${escapeHtml(cover)}">
+    <meta property="og:image" content="${escapeHtml(socialImage)}">
+    <meta property="og:image:secure_url" content="${escapeHtml(socialImage)}">
     <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="${escapeHtml(`${book.title} cover`)}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${escapeHtml(book.title)}">
     <meta name="twitter:description" content="${escapeHtml(description)}">
-    <meta name="twitter:image" content="${escapeHtml(cover)}">
+    <meta name="twitter:image" content="${escapeHtml(socialImage)}">
+    <meta name="twitter:image:alt" content="${escapeHtml(`${book.title} cover`)}">
     <link rel="stylesheet" href="../../styles.css?v=${appVersion}">
   </head>
   <body>
